@@ -1,0 +1,110 @@
+---
+version: 0.1.0
+
+input:
+
+    - name: image
+      type: IntensityImage
+      key:
+      help: >
+        Grayscale image in which spots should be detected.
+
+    - name: mask
+      type: LabelImage
+      key:
+      help: >
+          Binary or labeled image of objects in which spots should be
+          detected (e.g. cell segmentation image).
+
+    - name: spot_size
+      type: Numeric
+      value: 5
+      help: >
+          This value corresponds to the approximate size of you spots. It should
+          be their diameter in pixels. The LoG will use a mask of this size to
+          enhance radial signal of that size. Note that in practice the specific
+          value does not affect the number of spots, if spots are bright (eg.
+          pixel size 5 or 6).
+
+    - name: rescale_quantile_min
+      type: Numeric
+      value: 0.01
+      help: >
+          Prior to spot detection the images are rescaled according to their
+          intensity. Since the specific value of minimal and maximal intensities
+          are frequently not robust across multiple images, intensity quantile are
+          used instead. [0 1] would correspond to using the single dimmest pixel
+          for minimal intensity and the single brightest pixel for maximal
+          intensity. [0.01 0.90] would mean that the minimum intensity is derived
+          from the pixel, which is the 1% brightest pixel of all and that the
+          maximum intensity is derived from the pixel, which is the 90% brightest
+          pixel.
+
+    - name: rescale_quantile_max
+      type: Numeric
+      value: 0.99
+      help: >
+          See above.
+
+    - name: min_of_min
+      type: Numeric
+      value: 0
+      help: >
+          Absolute limit for quantile-based image rescaling (lowest min.). Enter ``0`` for ``NaN``.
+
+    - name: max_of_min
+      type: Numeric
+      value: 120
+      help: >
+          Absolute limit for quantile-based image rescaling (highest min.). Enter ``0`` for ``NaN``.
+
+    - name: min_of_max
+      type: Numeric
+      value: 500
+      help: >
+          Absolute limit for quantile-based image rescaling (lowest max.). Enter ``0`` for ``NaN``.
+
+    - name: max_of_max
+      type: Numeric
+      value: 0
+      help: >
+          Absolute limit for quantile-based image rescaling (highest max.). Enter ``0`` for ``NaN``.
+
+    - name: detection_threshold
+      type: Numeric
+      value: 0.02
+      help: >
+          Threshold for spot detection intensity in rescaled image (default:
+          ``0.02``). The higher the value, the more stringent spot detection is.
+
+    - name: deblending_steps
+      type: Numeric
+      value: 20
+      help: >
+          The amount of deblending steps, which are done. The higher it is the less
+          likely it is that two adjacent spots are not separated. The default of 30
+          works very well (and we did not see improvement on our images with higher
+          values). Note that the number of deblending steps is the main determinant
+          of computational time for this module.
+
+    - name: plot
+      type: Plot
+      value: false
+      help: Should a figure be created?
+
+    - name: plot_clip_value
+      type: Numeric
+      value: 150
+      help: Clip value for debug plots
+
+output:
+
+    - name: spots
+      type: LabelImage
+      key: identify_spots_2D.spots
+      help: Labelled centroids of spots identified in the image.
+
+    - name: figure
+      type: Figure
+      help: Plot created by identify_spots_2D jterator module.
+
