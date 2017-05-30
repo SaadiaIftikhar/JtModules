@@ -2,8 +2,7 @@ classdef identify_primary_objects_iw < handle
 
 properties (Constant)
 
-VERSION = '0.0.1'
-
+    VERSION = '0.0.3'
 end
 
 methods (Static)
@@ -137,7 +136,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
             % Classify pixel regions into "clumps" and "non_clumps"
             % based on provided morphological criteria.
             % Only "clumps" will be further processed.
-            [clumps, non_clumps(:,:,i)] = jtlib.selectClumps_iw(masks(:,:,i), ...
+            [clumps, non_clumps(:,:,i)] = selectClumps_iw(masks(:,:,i), ...
                                                              max_solidity, min_formfactor, ...
                                                              max_area, min_area);
 
@@ -157,7 +156,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
             
             % In rare cases the above smoothing approach creates new, small
             % masks that cause problems. So we remove them.
-            clumps = bwlabel(jtlib.removeSmallObjects(clumps, min_area));
+            clumps = bwlabel(removeSmallObjects(clumps, min_area));
             
             % Perform perimeter analysis
             % NOTE: PerimeterAnalysis cannot handle holes in masks (we may
@@ -166,7 +165,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
             % (e.g. in case of images acquired with low magnification) limits
             % maximal size of the sliding window and thus sensitivity of the
             % perimeter analysis.
-            perimeters{i} = jtlib.analysePerimeter(clumps, sliding_window_size);
+            perimeters{i} = analysePerimeter(clumps, sliding_window_size);
             
             % This parameter limits the number of allowed concave regions.
             % It can serve as a safety measure to prevent runtime problems for
@@ -174,7 +173,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
             max_num_regions = 30;
             
             % Perform the actual segmentation
-            cut_mask(:,:,i) = jtlib.separateClumps_iw(clumps, rescaled_input_image, ...
+            cut_mask(:,:,i) = separateClumps_iw(clumps, rescaled_input_image, ...
                                                    perimeters{i}, max_radius, min_angle, ...
                                                    min_cut_area, max_num_regions, 'debugOFF');
         
@@ -267,7 +266,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
 
     %     elseif selection_test_mode
 
-    %         import jtlib.calculateObjectSelectionFeatures;
+    %         import calculateObjectSelectionFeatures;
 
     %         h = cutting_passes;
     %         mask = masks(:,:,h);
@@ -338,24 +337,24 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
 
     %     end
 
-    % jtlib.plotting.save_figure(fig, varargin{2})
+    % plotting.save_figure(fig, varargin{2})
 
     mask = logical(sum(selected_clumps, 3));
-    ds_mask = imresize(uint8(mask), 1/jtlib.plotting.IMAGE_RESIZE_FACTOR);
-    ds_cut = imresize(logical(sum(cut_mask, 3)), 1/jtlib.plotting.IMAGE_RESIZE_FACTOR);
+    ds_mask = imresize(uint8(mask), 1/plotting.IMAGE_RESIZE_FACTOR);
+    ds_cut = imresize(logical(sum(cut_mask, 3)), 1/plotting.IMAGE_RESIZE_FACTOR);
     ds_mask(ds_cut) = 2;
     dims = size(mask);
     ds_dims = size(ds_mask);
 
-    pos = jtlib.plotting.PLOT_POSITION_MAPPING.ll;
-    col_pos = jtlib.plotting.COLORBAR_POSITION_MAPPING.ll;
+    pos = plotting.PLOT_POSITION_MAPPING.ll;
+    col_pos = plotting.COLORBAR_POSITION_MAPPING.ll;
 
     colorscale = {{0, 'rgb(0,0,0)'}, {0.5, 'rgb(255, 255, 255)'}, {1, 'rgb(255, 0, 0)'}};
 
-    overlay_plot = jtlib.plotting.create_overlay_image_plot( ...
+    overlay_plot = plotting.create_overlay_image_plot( ...
         input_image, output_mask, 'ul' ...
     );
-    mask_plot = jtlib.plotting.create_mask_image_plot( ...
+    mask_plot = plotting.create_mask_image_plot( ...
         output_mask, 'ur' ...
     );
     cut_plot = struct( ...
@@ -368,7 +367,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
                     'thickness', 10, ...
                     'y', col_pos(1), ...
                     'x', col_pos(2), ...
-                    'len', jtlib.plotting.PLOT_HEIGHT ...
+                    'len', plotting.PLOT_HEIGHT ...
                 ), ...
                 'y', linspace(0, dims(1), ds_dims(1)), ...
                 'x', linspace(0, dims(2), ds_dims(2)), ...
@@ -379,7 +378,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
 
     plots = {overlay_plot, mask_plot, cut_plot};
 
-    fig = jtlib.plotting.create_figure(plots);
+    fig = plotting.create_figure(plots);
 
     if test_mode
         if selection_test_mode
@@ -392,3 +391,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
     end
 
 end
+end
+end
+end
+

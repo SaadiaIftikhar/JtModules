@@ -49,8 +49,8 @@ function CutMask = separateClumps_iw(LabelImage, IntensityImage, ...
 %       Markus Herrmann
 %       Nicolas Battich
 
-import jtlib.dijkstra;
-% import jtlib.plotting.freezeColors;
+import dijkstra;
+% import plotting.freezeColors;
 
 % Obtain pixels at inner periphery of objects
 props = regionprops(LabelImage,'BoundingBox');

@@ -2,7 +2,7 @@ classdef identify_secondary_objects_iw < handle
 
     properties (Constant)
 
-        VERSION = '0.0.1'
+        VERSION = '0.0.3'
 
     end
 
@@ -131,15 +131,15 @@ classdef identify_secondary_objects_iw < handle
                 [x_dim, y_dim] = size(intensity_image);
                 [ds_x_dim, ds_y_dim] = size(ds_img);
 
-                overlay_plot = jtlib.plotting.create_overlay_image_plot( ...
+                overlay_plot = plotting.create_overlay_image_plot( ...
                     intensity_image, output_label_image, 'ul' ...
                 );
-                mask_plot = jtlib.plotting.create_mask_image_plot( ...
+                mask_plot = plotting.create_mask_image_plot( ...
                     output_label_image, 'ur' ...
                 );
                 plots = {overlay_plot, mask_plot};
 
-                fig = jtlib.plotting.create_figure(plots);
+                fig = plotting.create_figure(plots);
             end
 
             output_label_image = int32(output_label_image);

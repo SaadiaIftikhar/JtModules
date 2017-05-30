@@ -147,8 +147,8 @@ function [secondaryLabelMatrixImage, editedPrimaryBinaryImage, thresholdArray] =
 
     dbstop if error
 
-    import jtlib.calculateThresholdLevel;
-    import jtlib.removeSmallObjects;
+    import calculateThresholdLevel;
+    import removeSmallObjects;
 
     UseAsLabelInCaseNoBackgroundPresent = prelimPrimaryLabelMatrixImage;
     if any(prelimPrimaryLabelMatrixImage(:) == 0)
