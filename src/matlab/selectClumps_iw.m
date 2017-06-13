@@ -1,6 +1,7 @@
 function [objects2Cut, objectsNot2Cut] = selectClumps_iw(objects, maxSolidity, minFormFactor, maxArea, minArea)
 
-    import plotting;
+%     import plotting;
+    import rplabel;
     import calculateObjectSelectionFeatures;
 
     [area, solidity, formFactor] = calculateObjectSelectionFeatures(objects);
@@ -13,7 +14,7 @@ function [objects2Cut, objectsNot2Cut] = selectClumps_iw(objects, maxSolidity, m
     objSelected = zeros(size(obj2cut));
     objSelected(obj2cut) = 1;
     objSelected(objNot2cut) = 2;
-    selectedObjects = plotting.rplabel(logical(objects),[],objSelected);
+    selectedObjects = rplabel(logical(objects),[],objSelected);
 
     % Create mask image with objects selected for cutting
     objects2Cut = zeros(size(objects));
