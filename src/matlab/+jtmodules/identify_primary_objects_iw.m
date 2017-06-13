@@ -79,8 +79,8 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
 
     % those functions could become private
     import analysePerimeter;
-    import separateClumps_iw;
-    import selectClumps_iw;
+    import separateClumps;
+    import selectClumps;
     import removeSmallObjects;
     import plotting;
 
@@ -136,7 +136,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
             % Classify pixel regions into "clumps" and "non_clumps"
             % based on provided morphological criteria.
             % Only "clumps" will be further processed.
-            [clumps, non_clumps(:,:,i)] = selectClumps_iw(masks(:,:,i), ...
+            [clumps, non_clumps(:,:,i)] = selectClumps(masks(:,:,i), ...
                                                              max_solidity, min_formfactor, ...
                                                              max_area, min_area);
 
@@ -174,7 +174,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
             max_num_regions = 30;
             
             % Perform the actual segmentation
-            cut_mask(:,:,i) = separateClumps_iw(clumps, rescaled_input_image, ...
+            cut_mask(:,:,i) = separateClumps(clumps, rescaled_input_image, ...
                                                    perimeters{i}, max_radius, min_angle, ...
                                                    min_cut_area, max_num_regions, 'debugOFF');
         
