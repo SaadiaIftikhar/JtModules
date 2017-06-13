@@ -99,8 +99,10 @@ classdef identify_secondary_objects_iw < handle
                     length(unique_input_labels), length(unique_new_labels))
             end
 
-            output_label_image = segmentSecondary_iw(rescaled_input_image, relabeled_image, relabeled_image, ...
-                                                  correction_factors, min_threshold, max_threshold);
+            output_label_image = segmentSecondary_iw(rescaled_input_image, ...
+                                                  relabeled_image, relabeled_image, ...
+                                                  correction_factors, min_threshold, ...
+                                                  max_threshold);
 
             % Make sure labels are consistent
             unique_output_labels = unique(output_label_image(output_label_image > 0));
@@ -118,7 +120,8 @@ classdef identify_secondary_objects_iw < handle
                 if any(index)
                     final_output_label_image(index) = mapping(oid);
                 else
-                    final_output_label_image(relabeled_image == mapping(oid)) = mapping(obj);
+                    final_output_label_image(relabeled_image ==  ...
+                        mapping(oid)) = mapping(obj);
                 end
             end
 
@@ -131,15 +134,15 @@ classdef identify_secondary_objects_iw < handle
                 [x_dim, y_dim] = size(intensity_image);
                 [ds_x_dim, ds_y_dim] = size(ds_img);
 
-                overlay_plot = plotting.create_overlay_image_plot( ...
+                overlay_plot = jtlib.plotting.create_overlay_image_plot( ...
                     intensity_image, output_label_image, 'ul' ...
                 );
-                mask_plot = plotting.create_mask_image_plot( ...
+                mask_plot = jtlib.plotting.create_mask_image_plot( ...
                     output_label_image, 'ur' ...
                 );
                 plots = {overlay_plot, mask_plot};
 
-                fig = plotting.create_figure(plots);
+                fig = jtlib.plotting.create_figure(plots);
             end
 
             output_label_image = int32(output_label_image);
