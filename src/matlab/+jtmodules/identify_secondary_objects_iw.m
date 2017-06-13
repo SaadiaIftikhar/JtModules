@@ -42,8 +42,8 @@ classdef identify_secondary_objects_iw < handle
             % _[1] Stoeger T, Battich N, Herrmann MD, Yakimovich Y, Pelkmans L.
             %      Computer vision for image-based transcriptomics. Methods. 2015
 
-            import segmentSecondary;
-            import plotting;
+            import jtlib.segmentSecondary;
+            import jtlib.plotting;
 
             if nargin < 5
                 plot = false;
@@ -99,7 +99,7 @@ classdef identify_secondary_objects_iw < handle
                     length(unique_input_labels), length(unique_new_labels))
             end
 
-            output_label_image = segmentSecondary(rescaled_input_image, ...
+            output_label_image = jtlib.segmentSecondary(rescaled_input_image, ...
                                                   relabeled_image, relabeled_image, ...
                                                   correction_factors, min_threshold, ...
                                                   max_threshold);

@@ -78,11 +78,11 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
     fig = '';
 
     % those functions could become private
-    import analysePerimeter;
-    import separateClumps;
-    import selectClumps;
-    import removeSmallObjects;
-    import plotting;
+    import jtlib.analysePerimeter;
+    import jtlib.separateClumps;
+    import jtlib.selectClumps;
+    import jtlib.removeSmallObjects;
+    import jtlib.plotting;
 
     test_mode = selection_test_mode || perimeter_test_mode;
     if perimeter_test_mode && selection_test_mode
@@ -136,7 +136,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
             % Classify pixel regions into "clumps" and "non_clumps"
             % based on provided morphological criteria.
             % Only "clumps" will be further processed.
-            [clumps, non_clumps(:,:,i)] = selectClumps(masks(:,:,i), ...
+            [clumps, non_clumps(:,:,i)] = jtlib.selectClumps(masks(:,:,i), ...
                                                              max_solidity, min_formfactor, ...
                                                              max_area, min_area);
 
@@ -174,7 +174,7 @@ function [output_mask, fig] = main(input_mask, input_image, cutting_passes, min_
             max_num_regions = 30;
             
             % Perform the actual segmentation
-            cut_mask(:,:,i) = separateClumps(clumps, rescaled_input_image, ...
+            cut_mask(:,:,i) = jtlib.separateClumps(clumps, rescaled_input_image, ...
                                                    perimeters{i}, max_radius, min_angle, ...
                                                    min_cut_area, max_num_regions, 'debugOFF');
         
