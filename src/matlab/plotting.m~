@@ -505,7 +505,7 @@ classdef plotting
             end
 
 %             fig = plotlyfig;
-            fig = figure;
+fig = figure;
             fig.data = data;
             fig.layout = layout;
             jdata = escapechars(m2json(fig.data));
