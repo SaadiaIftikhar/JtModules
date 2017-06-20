@@ -14,8 +14,8 @@
  * $Revision: 3667 $
  */
 
-// #include <math>
-// #include <mex>
+#include <math.h>
+#include <mex.h>
 #include <queue>
 #include <vector>
 #include <iostream>
