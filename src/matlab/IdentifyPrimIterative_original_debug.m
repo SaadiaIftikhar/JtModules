@@ -226,7 +226,7 @@ CPisHeadless = false;
 %% LOAD IMAGES FROM HANDLES %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-input_image = imread('N:\gliberal\Users\lukoilya\NOVARTIS_DATA\Test_C03_T0001F002L01A01Z01C01.png');
+input_image = imread('/Users/saadiaiftikhar/Desktop/masha_synthetic_data/Test_C03_T0001F002L01A01Z01C01.png');
 
 OrigImage = input_image;
 
@@ -259,7 +259,8 @@ end
 % if isempty(index)
 %     error(['Image processing was canceled in the ', ModuleName, ' module because the Min and Max threshold bounds are invalid.'])
 % end
-Threshold = 0.9;
+
+% Threshold = 0.9;
 MinimumThreshold = min(ThresholdRange);
 MaximumThreshold = max(ThresholdRange);
 
