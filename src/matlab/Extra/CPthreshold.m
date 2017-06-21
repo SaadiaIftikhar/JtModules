@@ -1,4 +1,4 @@
-function [handles,Threshold] = CPthreshold(handles,Threshold,pObject,MinimumThreshold,MaximumThreshold,ThresholdCorrection,OrigImage,ImageName,ModuleName,ObjectVar)
+function [Threshold] = CPthreshold(Threshold,pObject,MinimumThreshold,MaximumThreshold,ThresholdCorrection,OrigImage,ModuleName,fieldname)
 
 % CellProfiler is distributed under the GNU General Public License. See the
 % accompanying file LICENSE for details.
@@ -15,11 +15,11 @@ function [handles,Threshold] = CPthreshold(handles,Threshold,pObject,MinimumThre
 %
 % $Revision: 2802 $
 
-if nargin == 9
-    ObjectVar = [];
-else
-    ObjectVar = [ObjectVar,'_'];
-end
+% if nargin == 9
+%     ObjectVar = [];
+% else
+%     ObjectVar = [ObjectVar,'_'];
+% end
 
 %%% If we are running the Histogram data tool we do not want to limit the
 %%% threshold with a maximum of 1 or minimum of 0; otherwise we check for
@@ -31,7 +31,7 @@ if ~strcmpi('Histogram Data tool',ModuleName)
     if strcmp(MinimumThreshold,'Do not use')
         MinimumThreshold = 0;
     else
-        MinimumThreshold = str2double(MinimumThreshold);
+%         MinimumThreshold = str2double(MinimumThreshold);
         if isnan(MinimumThreshold) |  MinimumThreshold < 0 | MinimumThreshold > 1 %#ok Ignore MLint
             error(['The Minimum threshold entry in the ', ModuleName, ' module is invalid.'])
         end
@@ -40,7 +40,7 @@ if ~strcmpi('Histogram Data tool',ModuleName)
     if strcmp(MaximumThreshold,'Do not use')
         MaximumThreshold = 1;
     else
-        MaximumThreshold = str2double(MaximumThreshold);
+%         MaximumThreshold = str2double(MaximumThreshold);
         if isnan(MaximumThreshold) | MaximumThreshold < 0 | MaximumThreshold > 1 %#ok Ignore MLint
             error(['The Maximum bound on the threshold in the ', ModuleName, ' module is invalid.'])
         end
@@ -61,52 +61,52 @@ end
 %%% cases: if the user is going to set the threshold interactively, if they
 %%% are using All images together to calculate the threshold, or if they
 %%% have manually entered a numerical value for the threshold.
-if strcmp(Threshold,'Set interactively') || strcmp(Threshold,'All') || ~strcmp(class(Threshold),'char')
-    %%% In these cases, don't do anything.
-else
-    fieldname = ['CropMask', ImageName];
-    if isfield(handles.Pipeline,fieldname)
-        %%% Retrieves crop mask from handles structure. In some cases, it
-        %%% might be a label matrix, if we are cropping based on objects
-        %%% being present, so we make sure the resulting image is of the
-        %%% logical class. This yields a warning at times, because the
-        %%% image has values above one, so we temporarily turn the warning
-        %%% off.
-        OrigWarnState = warning('off','MATLAB:conversionToLogical');
-        RetrievedCropMask = handles.Pipeline.(fieldname);
-        RetrievedBinaryCropMask = logical(RetrievedCropMask);
-        warning(OrigWarnState);
-        %%% Handle the case where there are no pixels on in the mask, in
-        %%% which case the threshold should be set to a numnber higher than
-        %%% any pixels in the original image. In this case, the automatic
-        %%% calculations are aborted below, because now Threshold = a
-        %%% numerical value rather than a method name like 'Otsu', etc. So
-        %%% from this point forward, in this case, the threshold is as if
-        %%% entered manually.
-        if (~any(RetrievedBinaryCropMask)),
-            Threshold = 1;
-        end
-        %%% Checks whether the size of the RetrievedBinaryCropMask matches
-        %%% the size of the OrigImage.
-        if numel(OrigImage) == numel(RetrievedBinaryCropMask)
-            BinaryCropMask = RetrievedBinaryCropMask;
-            %%% Masks the image based on its BinaryCropMask and
-            %%% simultaneously makes it a linear set of numbers.
-            LinearMaskedImage = OrigImage(BinaryCropMask~=0);
-        else
-            Warning = CPwarndlg(['In CPthreshold, within the ',ModuleName,' module, the retrieved binary crop mask image (handles.Pipeline.',fieldname,') is not being used because it does not match the size of the original image(',ImageName,').']);
-            %%% If the sizes do not match, then it is as if the crop mask
-            %%% does not exist. I don't think this should ever actually
-            %%% happen, but it might be needed for debugging.
-        end
-    end
-    %%% If we have not masked the image for some reason, we need to create
-    %%% the LinearMaskedImage variable, and simultaneously make it a linear
-    %%% set of numbers.
+% if strcmp(Threshold,'Set interactively') || strcmp(Threshold,'All') || ~strcmp(class(Threshold),'char')
+%     %%% In these cases, don't do anything.
+% else
+%     fieldname = ['CropMask', ImageName];
+%     if isfield(fieldname)
+%         %%% Retrieves crop mask from handles structure. In some cases, it
+%         %%% might be a label matrix, if we are cropping based on objects
+%         %%% being present, so we make sure the resulting image is of the
+%         %%% logical class. This yields a warning at times, because the
+%         %%% image has values above one, so we temporarily turn the warning
+%         %%% off.
+%         OrigWarnState = warning('off','MATLAB:conversionToLogical');
+%         RetrievedCropMask = handles.Pipeline.(fieldname);
+%         RetrievedBinaryCropMask = logical(RetrievedCropMask);
+%         warning(OrigWarnState);
+%         %%% Handle the case where there are no pixels on in the mask, in
+%         %%% which case the threshold should be set to a numnber higher than
+%         %%% any pixels in the original image. In this case, the automatic
+%         %%% calculations are aborted below, because now Threshold = a
+%         %%% numerical value rather than a method name like 'Otsu', etc. So
+%         %%% from this point forward, in this case, the threshold is as if
+%         %%% entered manually.
+%         if (~any(RetrievedBinaryCropMask)),
+%             Threshold = 1;
+%         end
+%         %%% Checks whether the size of the RetrievedBinaryCropMask matches
+%         %%% the size of the OrigImage.
+%         if numel(OrigImage) == numel(RetrievedBinaryCropMask)
+%             BinaryCropMask = RetrievedBinaryCropMask;
+%             %%% Masks the image based on its BinaryCropMask and
+%             %%% simultaneously makes it a linear set of numbers.
+%             LinearMaskedImage = OrigImage(BinaryCropMask~=0);
+%         else
+%             Warning = CPwarndlg(['In CPthreshold, within the ',ModuleName,' module, the retrieved binary crop mask image (handles.Pipeline.',fieldname,') is not being used because it does not match the size of the original image(',ImageName,').']);
+%             %%% If the sizes do not match, then it is as if the crop mask
+%             %%% does not exist. I don't think this should ever actually
+%             %%% happen, but it might be needed for debugging.
+%         end
+%     end
+%     %%% If we have not masked the image for some reason, we need to create
+%     %%% the LinearMaskedImage variable, and simultaneously make it a linear
+%     %%% set of numbers.
     if ~exist('LinearMaskedImage','var')
         LinearMaskedImage = OrigImage(:);
     end
-end
+% end
 
 %%% STEP 1. Find threshold and apply to image
 if ~isempty(strfind(Threshold,'Global')) || ~isempty(strfind(Threshold,'Adaptive')) || ~isempty(strfind(Threshold,'PerObject'))
@@ -127,9 +127,9 @@ if ~isempty(strfind(Threshold,'Global')) || ~isempty(strfind(Threshold,'Adaptive
     %%% For all methods, Global or Adaptive or PerObject, we want to
     %%% calculate the global threshold. Sends the linear masked image to
     %%% the appropriate thresholding subfunction.
-    eval(['Threshold = ',ThresholdMethod,'(LinearMaskedImage,handles,ImageName,pObject);']);
+    eval(['Threshold = ',ThresholdMethod,'(LinearMaskedImage);']);
     %%% This evaluates to something like: Threshold =
-    %%% Otsu(LinearMaskedImage,handles,ImageName,pObject);
+    %%% Otsu(LinearMaskedImage,ImageName,pObject);
 
     %%% The global threshold is used to constrain the Adaptive or PerObject
     %%% thresholds.
@@ -178,15 +178,15 @@ if ~isempty(strfind(Threshold,'Global')) || ~isempty(strfind(Threshold,'Adaptive
             Block = [BestBlockSize BestBlockSize 2];
             %%% Sends the linear masked image to the appropriate
             %%% thresholding subfunction, in blocks.
-            eval(['Threshold = CPblkproc(PaddedImageandCropMask,Block,@',ThresholdMethod,',handles,ImageName,pObject);']);
+            eval(['Threshold = CPblkproc(PaddedImageandCropMask,Block,@',ThresholdMethod,',ImageName,pObject);']);
             %%% This evaluates to something like: Threshold =
-            %%% CPblkproc(PaddedImageandCropMask,Block,@Otsu,handles,ImageN
+            %%% CPblkproc(PaddedImageandCropMask,Block,@Otsu,ImageN
             %%% ame);
         else
             %%% If there is no crop mask, then we can simply use the
             %%% blkproc function rather than CPblkproc.
             Block = [BestBlockSize BestBlockSize];
-            eval(['Threshold = blkproc(PaddedImageandCropMask,Block,@',ThresholdMethod,',handles,ImageName,pObject);']);
+            eval(['Threshold = blkproc(PaddedImageandCropMask,Block,@',ThresholdMethod,',ImageName,pObject);']);
         end
 
         %%% Resizes the block-produced image to be the size of the padded
@@ -254,9 +254,9 @@ if ~isempty(strfind(Threshold,'Global')) || ~isempty(strfind(Threshold,'Adaptive
             
             %%% Sends those pixels to the appropriate threshold
             %%% subfunctions.
-            eval(['CalculatedThreshold = ',ThresholdMethod,'(Intensities,handles,ImageName,pObject);']);
+            eval(['CalculatedThreshold = ',ThresholdMethod,'(Intensities);']);
             %%% This evaluates to something like: Threshold =
-            %%% Otsu(Intensities,handles,ImageName,pObject);
+            %%% Otsu(Intensities,ImageName,pObject);
 
             %%% Sets the pixels corresponding to object i to equal the
             %%% calculated threshold.
@@ -364,17 +364,19 @@ else
 end
 %%% Correct the threshold using the correction factor given by the user and
 %%% make sure that the threshold is not larger than the minimum threshold
+
 Threshold = ThresholdCorrection*Threshold;
 Threshold = max(Threshold,MinimumThreshold);
-Threshold = min(Threshold,MaximumThreshold);
-handles = CPaddmeasurements(handles,'Image','OrigThreshold',[ObjectVar,ImageName],mean(mean(Threshold)));
+% Threshold = min(Threshold,MaximumThreshold);
+
+% handles = CPaddmeasurements('Image','OrigThreshold',[ObjectVar,ImageName],mean(mean(Threshold)));
 
 
 %%%%%%%%%%%%%%%%%%%%
 %%% SUBFUNCTIONS %%%
 %%%%%%%%%%%%%%%%%%%%
 
-function level = Otsu(im,handles,ImageName,pObject)
+function level = Otsu(im,ImageName,pObject)
 %%% This is the Otsu method of thresholding, adapted from MATLAB's
 %%% graythresh function. Our modifications work in log space, and take into
 %%% account the max and min values in the image.
@@ -407,7 +409,7 @@ else
     %%% an image with almost all values near zero can give a bad result.
     minval = max(im)/256;
     im(im < minval) = minval;
-    im = log(im);
+    im = log(double(im));
     minval = min (im);
     maxval = max (im);
     im = (im - minval) / (maxval - minval);
@@ -430,7 +432,7 @@ end
 % hold off
 % figure(30)
 
-function level = MoG(im,handles,ImageName,pObject)
+function level = MoG(im,ImageName,pObject)
 %%% Stands for Mixture of Gaussians. This function finds a suitable
 %%% threshold for the input image Block. It assumes that the pixels in the
 %%% image belong to either a background class or an object class. 'pObject'
@@ -572,7 +574,7 @@ else
     level = level(index);
 end
 
-function level = Background(im,handles,ImageName,pObject)
+function level = Background(im,ImageName,pObject)
 %%% The threshold is calculated by calculating the mode and multiplying by
 %%% 2 (an arbitrary empirical factor). The user will presumably adjust the
 %%% multiplication factor as needed.
@@ -605,7 +607,7 @@ else
 end
 
 
-function level = RobustBackground(im,handles,ImageName,pObject)
+function level = RobustBackground(im,ImageName,pObject)
 %%% The threshold is calculated by trimming the top and bottom 25% of
 %%% pixels off the image, then calculating the mean and standard deviation
 %%% of the remaining image. The threshold is then set at 2 (empirical
@@ -695,7 +697,7 @@ end
 % save('Batch_80Autodata','Means','StDevs','Levels','TrimmedImages','Images');
 
 
-function level = RidlerCalvard(im,handles,ImageName,pObject)
+function level = RidlerCalvard(im,ImageName,pObject)
 
 %%% The following is needed for the adaptive cases where there the image
 %%% has been cropped. This must be done within this subfunction, rather

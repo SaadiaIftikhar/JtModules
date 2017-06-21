@@ -15,7 +15,7 @@
  */
 
 #include <math.h>
-#include "mex.h"
+#include <mex.h>
 #include <queue>
 #include <vector>
 #include <iostream>

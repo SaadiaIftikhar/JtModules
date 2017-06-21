@@ -1,4 +1,4 @@
-function Image = CPretrieveimage(handles,ImageName,ModuleName,ColorFlag,ScaleFlag,SizeFlag)
+function Image = CPretrieveimage(Image,ModuleName,ColorFlag,ScaleFlag,SizeFlag)
 
 % CellProfiler is distributed under the GNU General Public License.
 % See the accompanying file LICENSE for details.
@@ -27,10 +27,10 @@ function Image = CPretrieveimage(handles,ImageName,ModuleName,ColorFlag,ScaleFla
 
 %%% Fills in missing arguments, if necessary.
 if nargin == 5
-%%% CPretrieveimage(handles,ImageName,ModuleName,ColorFlag,ScaleFlag)
+%%% CPretrieveimage(ImageName,ModuleName,ColorFlag,ScaleFlag)
     SizeFlag = 0;
 elseif nargin == 3
-%%% CPretrieveimage(handles,ImageName,ModuleName)
+%%% CPretrieveimage(ImageName,ModuleName)
     ColorFlag = 0;
     ScaleFlag = 0;
     SizeFlag = 0;
@@ -60,21 +60,22 @@ end
 
 %%% Checks whether the image to be analyzed exists in the handles
 %%% structure.
-if ~isfield(handles.Pipeline, ImageName)
-    %%% If the image is not there, an error message is produced.  The error
-    %%% is not displayed: The error function halts the current function and
-    %%% returns control to the calling function (the analyze all images
-    %%% button callback.)  That callback recognizes that an error was
-    %%% produced because of its try/catch loop and breaks out of the image
-    %%% analysis loop without attempting further modules.
-    error(['Image processing was canceled in the ', ModuleName, ' module because CellProfiler could not find the input image. CellProfiler expected to find an image named "', ImageName, '", but that image has not been created by the pipeline. Please adjust your pipeline to produce the image "', ImageName, '" prior to this ', ModuleName, ' module.'])
-end
+% if ~isfield(handles.Pipeline, ImageName)
+%     %%% If the image is not there, an error message is produced.  The error
+%     %%% is not displayed: The error function halts the current function and
+%     %%% returns control to the calling function (the analyze all images
+%     %%% button callback.)  That callback recognizes that an error was
+%     %%% produced because of its try/catch loop and breaks out of the image
+%     %%% analysis loop without attempting further modules.
+%     error(['Image processing was canceled in the ', ModuleName, ' module because CellProfiler could not find the input image. CellProfiler expected to find an image named "', ImageName, '", but that image has not been created by the pipeline. Please adjust your pipeline to produce the image "', ImageName, '" prior to this ', ModuleName, ' module.'])
+% end
 %%% Reads the image.
-Image = handles.Pipeline.(ImageName);
+
+% Image = handles.Pipeline.(ImageName);
 
 if ScaleFlag == 1
     if max(Image(:)) > 1 || min(Image(:)) < 0
-        CPwarndlg(['The image loaded in the ', ModuleName, ' module is outside the 0-1 range, and you may be losing data.'],'Outside 0-1 Range','replace');
+        error(['The image loaded in the ', ModuleName, ' module is outside the 0-1 range, and you may be losing data.'],'Outside 0-1 Range','replace');
     end
 end
 

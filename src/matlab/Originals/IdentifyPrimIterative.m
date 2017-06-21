@@ -1,14 +1,4 @@
-function [cellPerimeterProps, imFinalObjects, imObjects, ...
-    imSelected,imCutMask,imCut,imNotCut, objFormFactor, ...
-    objSolidity, objArea] = IdentifyPrimIterative_original_debug(input_image, ThresholdCorrection, ...
-                                    ThresholdRange, CuttingPasses, ...
-                                    SolidityThres, FormFactorThres,  ...
-                                    UpperSizeThres, LowerSizeThres, ...
-                                    LowerSizeCutThres, WindowSize, ...
-                                    smoothingDiskSize, PerimSegEqRadius, ...
-                                    plot)
-                                
-                                
+function handles = IdentifyPrimIterative(handles)
 
 % Help for IdentifyPrimIterative
 % Category: Object Processing
@@ -128,107 +118,101 @@ function [cellPerimeterProps, imFinalObjects, imObjects, ...
 %
 % $Revision: 1879 $
 
+
+
 %%%%%%%%%%%%%%%%%
 %%% VARIABLES %%%
 %%%%%%%%%%%%%%%%%
 
-% drawnow
+drawnow
 
-% [CurrentModule, CurrentModuleNum, ModuleName] = CPwhichmodule(handles);
+[CurrentModule, CurrentModuleNum, ModuleName] = CPwhichmodule(handles);
 
 %textVAR01 = What do you want to call the objects identified by this module?
 %defaultVAR01 = Nuclei
 %infotypeVAR01 = objectgroup indep
-% ObjectName = char(handles.Settings.VariableValues{CurrentModuleNum,1});
+ObjectName = char(handles.Settings.VariableValues{CurrentModuleNum,1});
 
 %textVAR02 = What did you call the intensity image that should be used for object identification?
 %infotypeVAR02 = imagegroup
-% ImageName = char(handles.Settings.VariableValues{CurrentModuleNum,2});
+ImageName = char(handles.Settings.VariableValues{CurrentModuleNum,2});
 %inputtypeVAR02 = popupmenu
 
-ModuleName = 'IdentifyPrimIterative';
-
 %textVAR03 = Intensity thresholding: Threshold correction factor
-ThresholdCorrection = 0.98;
-% ThresholdCorrection = ThresholdCorrection;
+%defaultVAR03 = 0.98
+ThresholdCorrection = str2num(char(handles.Settings.VariableValues{CurrentModuleNum,3}));
 
 %textVAR04 = Intensity thresholding: Lower and upper bounds on threshold, in the range [0,1]
-ThresholdRange = [0.0019,0.02];
-% ThresholdRange = char(handles.Settings.VariableValues{CurrentModuleNum,4});
+%defaultVAR04 = 0.0019,0.02
+ThresholdRange = char(handles.Settings.VariableValues{CurrentModuleNum,4});
 
 %textVAR05 = Cutting passes (0 = no cutting)
-CuttingPasses = 2;
-% CuttingPasses = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,5}));
+%defaultVAR05 = 2
+CuttingPasses = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,5}));
 
 %textVAR06 = Debug mode: Show individual steps while iterating over clumped objects
 %choiceVAR06 = Off
 %choiceVAR06 = On
-% DebugMode = char(handles.Settings.VariableValues{CurrentModuleNum,6});
+DebugMode = char(handles.Settings.VariableValues{CurrentModuleNum,6});
 %inputtypeVAR06 = popupmenu
 
 %textVAR07 = Object selection: Maximal SOLIDITY of objects, which should be cut (1 = solidity independent)
-SolidityThres = 0.92;
-% SolidityThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,7}));
+%defaultVAR07 = 0.92
+SolidityThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,7}));
 
 %textVAR08 = Object selection: Minimal FORM FACTOR of objects, which should be cut (0 = form factor independent)
-FormFactorThres = 0.40;
-
-% FormFactorThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,8}));
+%defaultVAR08 = 0.40
+FormFactorThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,8}));
 
 %textVAR09 = Object selection: Maximal AREA of objects, which should be cut (0 = area independent)
-UpperSizeThres = 500000;
-% UpperSizeThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,9}));
+%defaultVAR09 = 500000
+UpperSizeThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,9}));
 
 %textVAR10 = Object selection: Minimal AREA of objects, which should be cut (0 = area independent)
-LowerSizeThres = 5000;
-% LowerSizeThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,10}));
+%defaultVAR10 = 5000
+LowerSizeThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,10}));
 
 %textVAR11 = Minimal area that cut objects should have.
-LowerSizeCutThres = 2000;
-% LowerSizeCutThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,11}));
+%defaultVAR11 = 2000
+LowerSizeCutThres = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,11}));
 
 %textVAR12 = Test mode for object selection: solidity, area, form factor
-% choiceVAR12 = No
+%choiceVAR12 = No
 %choiceVAR12 = Yes
-% TestMode2 = char(handles.Settings.VariableValues{CurrentModuleNum,12});
+TestMode2 = char(handles.Settings.VariableValues{CurrentModuleNum,12});
 %inputtypeVAR12 = popupmenu
 
 %textVAR13 = Perimeter analysis: SLIDING WINDOW size for curvature calculation
-WindowSize = 9;
-% WindowSize = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,13}));
+%defaultVAR13 = 9
+WindowSize = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,13}));
 
 %textVAR14 = Perimeter analysis: FILTER SIZE for smoothing objects
-smoothingDiskSize = 15;
-% smoothingDiskSize = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,14}));
+%defaultVAR14 = 15
+smoothingDiskSize = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,14}));
 
 %textVAR15 = Perimeter analysis: Maximum concave region equivalent RADIUS
-PerimSegEqRadius = 20;
-% PerimSegEqRadius = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,15}));
+%defaultVAR15 = 20
+PerimSegEqRadius = str2double(char(handles.Settings.VariableValues{CurrentModuleNum,15}));
 
 %textVAR16 = Perimeter analysis: Minimum concave region equivalent CIRCULAR SEGMENT (degree)
-PerimSegEqSegment = 6;
-% PerimSegEqSegment = degtorad(str2double(char(handles.Settings.VariableValues{CurrentModuleNum,16})));
-
-DebugMode = 'No';
-
-CPisHeadless = false;
+%defaultVAR16 = 6
+PerimSegEqSegment = degtorad(str2double(char(handles.Settings.VariableValues{CurrentModuleNum,16})));
 
 %textVAR17 = Test mode for perimeter analysis: overlay curvature etc. on objects
 %choiceVAR17 = No
 %choiceVAR17 = Yes
-% TestMode = char(handles.Settings.VariableValues{CurrentModuleNum,17});
+TestMode = char(handles.Settings.VariableValues{CurrentModuleNum,17});
 %inputtypeVAR17 = popupmenu
 
 %%%VariableRevisionNumber = 15
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LOAD IMAGES FROM HANDLES %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-input_image = imread('/Users/saadiaiftikhar/Desktop/masha_synthetic_data/Test_C03_T0001F002L01A01Z01C01.png');
-
-OrigImage = input_image;
+OrigImage = handles.Pipeline.(ImageName);
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -245,8 +229,7 @@ if isempty(strmatch(ThresholdMethod,{'Otsu','MoG','Background','RobustBackground
     %if ~(strncmp(Threshold,'Otsu',4) || strncmp(Threshold,'MoG',3) || strfind(Threshold,'Background') ||strncmp(Threshold,'RidlerCalvard',13) || strcmp(Threshold,'All') || strcmp(Threshold,'Set interactively'))
     if isnan(str2double(Threshold))
         GetThreshold = 0;
-        ModuleName = 'IdentifyPrimIterative';
-        BinaryInputImage = CPretrieveimage(Threshold,ModuleName,'MustBeGray','CheckScale');
+        BinaryInputImage = CPretrieveimage(handles,Threshold,ModuleName,'MustBeGray','CheckScale');
     else
         GetThreshold = 1;
     end
@@ -255,20 +238,17 @@ else
 end
 
 %%% Checks that the Min and Max threshold bounds have valid values
-% index = strfind(ThresholdRange,',');
-% if isempty(index)
-%     error(['Image processing was canceled in the ', ModuleName, ' module because the Min and Max threshold bounds are invalid.'])
-% end
+index = strfind(ThresholdRange,',');
+if isempty(index)
+    error(['Image processing was canceled in the ', ModuleName, ' module because the Min and Max threshold bounds are invalid.'])
+end
+MinimumThreshold = ThresholdRange(1:index-1);
+MaximumThreshold = ThresholdRange(index+1:end);
 
-% Threshold = 0.9;
-MinimumThreshold = min(ThresholdRange);
-MaximumThreshold = max(ThresholdRange);
 
-fieldname = 'field';
 if GetThreshold
     OrigImage(OrigImage > quantile(OrigImage(:), 0.999)) = quantile(OrigImage(:), 0.999);
-    
-    [OrigThreshold] = CPthreshold(Threshold,pObject,MinimumThreshold,MaximumThreshold,ThresholdCorrection,OrigImage,ModuleName,fieldname);
+    [handles,OrigThreshold] = CPthreshold(handles,Threshold,pObject,MinimumThreshold,MaximumThreshold,ThresholdCorrection,OrigImage,ImageName,ModuleName,ObjectName);
 else
     OrigThreshold = 0;
 end
@@ -395,11 +375,10 @@ if ~isempty(imInputObjects)
         % GUI
         if CPisHeadless == false
             tmpSelected = (imSelected(:,:,i));
-%             ThisModuleFigureNumber = handles.Current.(['FigureNumberForModule',CurrentModule]);
-%             CPfigure(handles,'Image',ThisModuleFigureNumber);
-%             subplot(2,2,2); imagesc(logical(tmpSelected==1),handles);
-            subplot(2,2,2); imagesc(logical(tmpSelected==1));
-            title(['Cut lines on selected original objects, cycle # ']);
+            ThisModuleFigureNumber = handles.Current.(['FigureNumberForModule',CurrentModule]);
+            CPfigure(handles,'Image',ThisModuleFigureNumber);
+            subplot(2,2,2); CPimagesc(logical(tmpSelected==1),handles);
+            title(['Cut lines on selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
             hold on
             L = bwboundaries(logical(imCutMask(:,:,i)), 'noholes');
             for l = 1:length(L)
@@ -408,11 +387,11 @@ if ~isempty(imInputObjects)
             end
             hold off
             freezeColors
-            subplot(2,2,1); imagesc(imSelected(:,:,i)); colormap('jet');
-            title(['Selected original objects, cycle # ']);
+            subplot(2,2,1); CPimagesc(imSelected(:,:,i),handles); colormap('jet');
+            title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
             freezeColors
-            subplot(2,2,3); imagesc(imOutlineShapeSeparatedOverlay);
-            title(['Outlines of Separated objects, cycle # ']);
+            subplot(2,2,3); CPimagesc(imOutlineShapeSeparatedOverlay,handles);
+            title(['Outlines of Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
             hold on
             for k = 1:length(B)
                 boundary = B{k};
@@ -420,8 +399,8 @@ if ~isempty(imInputObjects)
             end
             hold off
             freezeColors
-            subplot(2,2,4); imagesc(imCutShapeObjectsLabel);
-            title(['Separated objects, cycle # ']);
+            subplot(2,2,4); CPimagesc(imCutShapeObjectsLabel,handles);
+            title(['Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
             freezeColors
         end
     end
@@ -434,7 +413,7 @@ if ~isempty(imInputObjects)
     
     if ~isempty(imCut)
         imErodeMask = bwmorph(imCut,'shrink',inf);
-        imDilatedMask = IdentifySecPropagateSubfunction(double(imErodeMask),double(OrigImage),imCut,1);
+        imDilatedMask = IdentifySecPropagateSubfunction(double(imErodeMask),OrigImage,imCut,1);
     end
     
     imNotCut = logical(sum(imNotCut,3));% Retrieve objects that were not cut
@@ -472,8 +451,8 @@ imCutShapeObjectsLabel = label2rgb(bwlabel(imFinalObjects),'jet','k','shuffle');
 % CPfigure(handles,'Image',ThisModuleFigureNumber);
 if CPisHeadless == false
     imDisplay = imSelected(:,:,1);
-    subplot(2,2,2); imagesc(logical(imDisplay));
-    title(['Cut lines on selected original objects, cycle # ']);
+    subplot(2,2,2); CPimagesc(logical(imDisplay),handles);
+    title(['Cut lines on selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
     hold on
     L = bwboundaries(logical(sum(imCutMask, 3)), 'noholes');
     for i = 1:length(L)
@@ -482,22 +461,20 @@ if CPisHeadless == false
     end
     hold off
     freezeColors
-    subplot(2,2,1); imagesc(imDisplay); colormap('jet'),
-    title(['Selected original objects, cycle # ']);
+    subplot(2,2,1); CPimagesc(imDisplay,handles); colormap('jet'),
+    title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
     freezeColors
-    subplot(2,2,3); imagesc(imOutlineShapeSeparatedOverlay);
-    title(['Outlines of Separated objects, cycle # ']);
+    subplot(2,2,3); CPimagesc(imOutlineShapeSeparatedOverlay,handles);
+    title(['Outlines of Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
     hold on
     for k = 1:length(B)
         boundary = B{k};
-%         if length(boundary(:,2)) > 0
-%             plot(boundary(:,2), boundary(:,1));
-%         end
+        plot(boundary(:,2), boundary(:,1), 'r', 'LineWidth', 1);
     end
     hold off
     freezeColors
-    subplot(2,2,4); imagesc(imCutShapeObjectsLabel);
-    title(['Separated objects, cycle # ']);
+    subplot(2,2,4); CPimagesc(imCutShapeObjectsLabel,handles);
+    title(['Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
     freezeColors
 end
 
@@ -514,7 +491,7 @@ end
 % end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-TestMode = 'No';
+
 %Plot shape analysis data
 if strcmp(TestMode,'Yes')
     if ~isempty(cellPerimeterProps)
@@ -544,34 +521,32 @@ if strcmp(TestMode,'Yes')
                     end
                 end
             end
-            
-            figure;
+            CPfigure('Tag',strcat('ShapeAnalysisPass',num2str(h)));
             
             subplot(2,2,1);
-            imagesc(imCurvature);
-            title(['Curvature image, cycle # ']);
+            CPimagesc(imCurvature,handles);
+            title(['Curvature image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
             
             subplot(2,2,2);
-            %problem with the CP image range scaling hack: while imagesc would
+            %problem with the CP image range scaling hack: while CPimagesc would
             %accept the range as an argument, 'Open in new window' will ignore
             %it. therefore the function has to be tricked somehow! solution:
             %make rgb image with each channel binary
             RGBConvexConcaveImage = cat(3,(imConvexConcave==1),(imConvexConcave==-1),zeros(size(imConvexConcave)));
-            imagesc(RGBConvexConcaveImage);
-            title(['Convex concave image, cycle # ']);
+            CPimagesc(RGBConvexConcaveImage,handles);
+            title(['Convex concave image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
             
             subplot(2,2,3);
-            imagesc(imAngle);
-            title(['Equivalent angle (degree) image, cycle # ']);
+            CPimagesc(imAngle,handles);
+            title(['Equivalent angle (degree) image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
             
             subplot(2,2,4);
-            imagesc(imRadius);
-            title(['Equivalent radius, cycle # ']);
+            CPimagesc(imRadius,handles);
+            title(['Equivalent radius, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
         end
     end
 end
 
-TestMode2 = 'No';
 % Plot area/shape feature data
 if strcmp(TestMode2,'Yes')
     if CPisHeadless == false
@@ -588,16 +563,15 @@ if strcmp(TestMode2,'Yes')
                 %             cmapG = cbrewer('seq', 'Greens', 9);
                 %             cmapB = cbrewer('seq', 'Blues', 9);
                 
-%                 CPfigure('Tag','Features for object selection')
-                figure;
-                subplot(2,2,1); imagesc(imSolidity); %colormap(cmapR),
-                title(['Solidity of original objects, cycle # ']);
-                subplot(2,2,2); imagesc(imFormFactor); %colormap(cmapG),
-                title(['Form factor of original objects, cycle # ']);
-                subplot(2,2,3); imagesc(imArea); %colormap(cmapB),
-                title(['Area of original objects, cycle # ']);
-                subplot(2,2,4); imagesc(imSelected(:,:,h)); colormap('jet');
-                title(['Selected original objects, cycle # ']);
+                CPfigure('Tag','Features for object selection')
+                subplot(2,2,1); CPimagesc(imSolidity,handles); %colormap(cmapR),
+                title(['Solidity of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+                subplot(2,2,2); CPimagesc(imFormFactor,handles); %colormap(cmapG),
+                title(['Form factor of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+                subplot(2,2,3); CPimagesc(imArea,handles); %colormap(cmapB),
+                title(['Area of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+                subplot(2,2,4); CPimagesc(imSelected(:,:,h),handles); colormap('jet');
+                title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
             end
         end
     end
@@ -610,7 +584,40 @@ if ~any(imFinalObjects(:) == 0)
    imFinalObjects = zeros(size(imFinalObjects));
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SAVE DATA TO HANDLES STRUCTURE %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+fieldname = ['UneditedSegmented',ObjectName];%not edited for size or edge
+handles.Pipeline.(fieldname) = imFinalObjects;
+
+fieldname = ['SmallRemovedSegmented',ObjectName];%for IdentifySecondary.m
+handles.Pipeline.(fieldname) = imFinalObjects;
+
+fieldname = ['Segmented',ObjectName];%final label image
+handles.Pipeline.(fieldname) = imFinalObjects;
+
+%%% Saves location of each segmented object
+handles.Measurements.(ObjectName).LocationFeatures = {'CenterX','CenterY'};
+tmp = regionprops(imFinalObjects,'Centroid');
+Centroid = cat(1,tmp.Centroid);
+if isempty(Centroid)
+    Centroid = [0 0];   % follow CP's convention to save 0s if no object
 end
+handles.Measurements.(ObjectName).Location(handles.Current.SetBeingAnalyzed) = {Centroid};
+
+%%% Saves ObjectCount, i.e. number of segmented objects.
+if ~isfield(handles.Measurements.Image,'ObjectCountFeatures')
+    handles.Measurements.Image.ObjectCountFeatures = {};
+    handles.Measurements.Image.ObjectCount = {};
+end
+column = find(~cellfun('isempty',strfind(handles.Measurements.Image.ObjectCountFeatures,ObjectName)));
+if isempty(column)
+    handles.Measurements.Image.ObjectCountFeatures(end+1) = {ObjectName};
+    column = length(handles.Measurements.Image.ObjectCountFeatures);
+end
+handles.Measurements.Image.ObjectCount{handles.Current.SetBeingAnalyzed}(1,column) = max(imFinalObjects(:));
 
 
+end
 
