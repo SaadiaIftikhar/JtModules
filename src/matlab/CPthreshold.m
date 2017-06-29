@@ -104,9 +104,9 @@ end
     %%% If we have not masked the image for some reason, we need to create
     %%% the LinearMaskedImage variable, and simultaneously make it a linear
     %%% set of numbers.
-   % if ~exist('LinearMaskedImage','var')
-    %    LinearMaskedImage = OrigImage(:);
-   % end
+    if ~exist('LinearMaskedImage','var')
+        LinearMaskedImage = OrigImage(:);
+    end
 %end
 
 %%% STEP 1. Find threshold and apply to image
