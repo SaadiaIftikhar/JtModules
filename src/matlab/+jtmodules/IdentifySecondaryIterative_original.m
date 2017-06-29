@@ -7,7 +7,7 @@ end
 
 methods (Static)    
 
-function  main(PrelimPrimaryLabelMatrixImage, ...
+function [FinalLabelMatrixImage, figure] =  main(PrelimPrimaryLabelMatrixImage, ...
                     iThresholdCorrection, ThresholdRange, OrigImage, plot)
 
 % Help for the IdentifySecondaryIterative module:
