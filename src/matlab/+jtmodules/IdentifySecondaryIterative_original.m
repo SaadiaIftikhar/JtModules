@@ -209,7 +209,7 @@ end
 %%% limits. Checks first to see whether the appropriate image exists.
 
 %EditedPrimaryLabelMatrixImage = PrimaryObjectName;
-EditedPrimaryLabelMatrixImage = PrelimPrimaryLabelMatrixImage;
+EditedPrimaryLabelMatrixImage = uint16(PrelimPrimaryLabelMatrixImage);
 % EditedPrimaryLabelMatrixImage = CPretrieveimage(handles,['Segmented', PrimaryObjectName],ModuleName,'DontCheckColor','DontCheckScale',size(OrigImage));
 
 %%% Chooses the first word of the method name (removing 'Global' or 'Adaptive').
