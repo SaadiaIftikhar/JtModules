@@ -405,9 +405,12 @@ else % standard case
         
         %%% STEP 3: Produce the marker image which will be used for the first
         %%% watershed.
+
         drawnow
         %%% Combines the foreground markers and the background markers.
-        BinaryMarkerImagePre = PrelimPrimaryBinaryImage | InvertedThresholdedOrigImage;
+        %size(PrelimPrimaryBinaryImage)
+        %size(InvertedThresholdedOrigImage)
+	BinaryMarkerImagePre = PrelimPrimaryBinaryImage | InvertedThresholdedOrigImage;
         %%% Overlays the PrimaryObjectOutlines to maintain distinctions between each
         %%% primary object and the background.
         BinaryMarkerImage = BinaryMarkerImagePre;
