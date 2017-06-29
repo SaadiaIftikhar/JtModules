@@ -147,6 +147,8 @@ PrimaryObjectName = 'PrimaryObject';
 %infotypeVAR02 = objectgroup indep
 SecondaryObjectName = 'SecondaryObject';
 
+ImageName = 'Image';
+
 %textVAR03 = What did you call the images to be used to find the edges of the secondary objects?
 %infotypeVAR03 = imagegroup
 % ImageName = char(handles.Settings.VariableValues{CurrentModuleNum,3});
