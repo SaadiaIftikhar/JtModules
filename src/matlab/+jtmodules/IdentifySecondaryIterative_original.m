@@ -152,6 +152,7 @@ SecondaryObjectName = 'SecondaryObject';
 % ImageName = char(handles.Settings.VariableValues{CurrentModuleNum,3});
 %inputtypeVAR03 = popupmenu
 
+ModuleName = 'SecondaryIterativeWatershed'; 
 handles.Settings.CurrentModule = 'SecondaryIterativeWatershed'; 
 handles.Settings.CurrentModuleNum = 1;
 handles.Settings.ModuleName = 'SecondaryIterativeWatershed'; 
