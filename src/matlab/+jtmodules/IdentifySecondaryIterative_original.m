@@ -234,16 +234,18 @@ end
 %MinimumThreshold = str2double(ThresholdRange(1:index-1));
 %MaximumThreshold = str2double(ThresholdRange(index+1:end));
 
-MinimumThreshold = min(ThresholdRange(1:index-1));
-MaximumThreshold = max(ThresholdRange(index+1:end));
+MinimumThreshold = min(ThresholdRange);
+MaximumThreshold = max(ThresholdRange);
 
 % Create vector containing the thresholds that should be tested
-[isSafe, iThresholdCorrection]= inputVectorsForEvalCP3D(iThresholdCorrection,false);
-if isSafe == false
-    error(['Image processing was canceled in the ', ModuleName, ' module because input of threshold contained forbidden characters'])
-else
-    ThresholdCorrection = eval(iThresholdCorrection);
-end
+%[isSafe, iThresholdCorrection]= inputVectorsForEvalCP3D(iThresholdCorrection,false);
+%if isSafe == false
+ %   error(['Image processing was canceled in the ', ModuleName, ' module because input of threshold contained forbidden characters'])
+%else
+
+ThresholdCorrection = iThresholdCorrection;
+
+%end
 
 %%%%%%%%%%%%%%%%%%%%%%
 %%% IMAGE ANALYSIS %%%
