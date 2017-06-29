@@ -385,6 +385,7 @@ function level = Otsu(im,handles,ImageName,pObject)
 %%% than in the main code prior to sending to this function via blkproc,
 %%% because the blkproc function takes a single image as input, so we have
 %%% to store the image and its cropmask in a single image variable.
+im = double(im);
 if ndims(im) == 3
     Image = im(:,:,1);
     CropMask = im(:,:,2);
