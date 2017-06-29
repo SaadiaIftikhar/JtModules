@@ -98,7 +98,7 @@ input:
 
   - name: plot
     type: Plot
-    value:
+    value: false
     options: [true, false]
     help: Should a figure be created?
 
@@ -107,7 +107,7 @@ output:
   - name: output_mask
     type: BinaryImage
     key:  identify_primary_objects_original.output_label_image 
-    help: Binary output image.
+    help: label output image.
 
   - name: fig
     type: Figure

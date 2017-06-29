@@ -137,7 +137,9 @@ function [imFinalObjects, figure] =  main(ThresholdCorrection, ...
 % %%%%%%%%%%%%%%%%%
 % 
  drawnow
-
+ 
+ ImageName = 'Image';
+ 
  handles.Settings.CurrentModule = 'PrimaryIterative'; 
  handles.Settings.CurrentModuleNum = 1;
  handles.Settings.ModuleName = 'PrimaryIterative'; 
@@ -272,13 +274,15 @@ else
 end
 
 %%% Checks that the Min and Max threshold bounds have valid values
-index = strfind(ThresholdRange,',');
-if isempty(index)
-    error(['Image processing was canceled in the ', ModuleName, ' module because the Min and Max threshold bounds are invalid.'])
-end
-MinimumThreshold = ThresholdRange(1:index-1);
-MaximumThreshold = ThresholdRange(index+1:end);
+% index = strfind(ThresholdRange,',');
+% if isempty(index)
+%     error(['Image processing was canceled in the ', ModuleName, ' module because the Min and Max threshold bounds are invalid.'])
+% end
+% MinimumThreshold = ThresholdRange(1:index-1);
+% MaximumThreshold = ThresholdRange(index+1:end);
 
+MinimumThreshold = min(ThresholdRange);
+ MaximumThreshold = max(ThresholdRange);
 
 if GetThreshold
     input_image(input_image > quantile(input_image(:), 0.999)) = quantile(input_image(:), 0.999);
@@ -405,36 +409,36 @@ if ~isempty(imInputObjects)
         imCutShapeObjectsLabel = label2rgb(bwlabel(imCut(:,:,i)),'jet','k','shuffle');
         
         % GUI
-        if CPisHeadless == false
-            tmpSelected = (imSelected(:,:,i));
-            ThisModuleFigureNumber = handles.Current.(['FigureNumberForModule',CurrentModule]);
-            CPfigure(handles,'Image',ThisModuleFigureNumber);
-            subplot(2,2,2); CPimagesc(logical(tmpSelected==1),handles);
-            title(['Cut lines on selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-            hold on
-            L = bwboundaries(logical(imCutMask(:,:,i)), 'noholes');
-            for l = 1:length(L)
-                line = L{l};
-                plot(line(:,2), line(:,1), 'r', 'LineWidth', 3);
-            end
-            hold off
-            freezeColors
-            subplot(2,2,1); CPimagesc(imSelected(:,:,i),handles); colormap('jet');
-            title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-            freezeColors
-            subplot(2,2,3); CPimagesc(imOutlineShapeSeparatedOverlay,handles);
-            title(['Outlines of Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-            hold on
-            for k = 1:length(B)
-                boundary = B{k};
-                plot(boundary(:,2), boundary(:,1), 'r', 'LineWidth', 1);
-            end
-            hold off
-            freezeColors
-            subplot(2,2,4); CPimagesc(imCutShapeObjectsLabel,handles);
-            title(['Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-            freezeColors
-        end
+%         if CPisHeadless == false
+%             tmpSelected = (imSelected(:,:,i));
+%             ThisModuleFigureNumber = handles.Current.(['FigureNumberForModule',CurrentModule]);
+%             CPfigure(handles,'Image',ThisModuleFigureNumber);
+%             subplot(2,2,2); CPimagesc(logical(tmpSelected==1),handles);
+%             title(['Cut lines on selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%             hold on
+%             L = bwboundaries(logical(imCutMask(:,:,i)), 'noholes');
+%             for l = 1:length(L)
+%                 line = L{l};
+%                 plot(line(:,2), line(:,1), 'r', 'LineWidth', 3);
+%             end
+%             hold off
+%             freezeColors
+%             subplot(2,2,1); CPimagesc(imSelected(:,:,i),handles); colormap('jet');
+%             title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%             freezeColors
+%             subplot(2,2,3); CPimagesc(imOutlineShapeSeparatedOverlay,handles);
+%             title(['Outlines of Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%             hold on
+%             for k = 1:length(B)
+%                 boundary = B{k};
+%                 plot(boundary(:,2), boundary(:,1), 'r', 'LineWidth', 1);
+%             end
+%             hold off
+%             freezeColors
+%             subplot(2,2,4); CPimagesc(imCutShapeObjectsLabel,handles);
+%             title(['Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%             freezeColors
+%         end
     end
     
     %-----------------------------------------------
@@ -468,188 +472,196 @@ else
 end
 
 
+if plot
+        plots = { ...
+                jtlib.plotting.create_intensity_image_plot(imFinalObjects, 'ul')};
+                figure = jtlib.plotting.create_figure(plots);
+else
+    figure = '';
+end
+
 %%%%%%%%%%%%%%%%%%%%%
 %% DISPLAY RESULTS %%
 %%%%%%%%%%%%%%%%%%%%%
 
-drawnow
-
-% Create overlay images
-imOutlineShapeSeparatedOverlay = input_image;
-B = bwboundaries(logical(imFinalObjects),'holes');
-imCutShapeObjectsLabel = label2rgb(bwlabel(imFinalObjects),'jet','k','shuffle');
-
-% GUI
-% CPfigure(handles,'Image',ThisModuleFigureNumber);
-if CPisHeadless == false
-    imDisplay = imSelected(:,:,1);
-    subplot(2,2,2); CPimagesc(logical(imDisplay),handles);
-    title(['Cut lines on selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-    hold on
-    L = bwboundaries(logical(sum(imCutMask, 3)), 'noholes');
-    for i = 1:length(L)
-        line = L{i};
-        plot(line(:,2), line(:,1), 'r', 'LineWidth', 3);
-    end
-    hold off
-    freezeColors
-    subplot(2,2,1); CPimagesc(imDisplay,handles); colormap('jet'),
-    title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-    freezeColors
-    subplot(2,2,3); CPimagesc(imOutlineShapeSeparatedOverlay,handles);
-    title(['Outlines of Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-    hold on
-    for k = 1:length(B)
-        boundary = B{k};
-        plot(boundary(:,2), boundary(:,1), 'r', 'LineWidth', 1);
-    end
-    hold off
-    freezeColors
-    subplot(2,2,4); CPimagesc(imCutShapeObjectsLabel,handles);
-    title(['Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-    freezeColors
-end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% if strcmpi(savePDF, 'Yes')
-%     % Save figure als PDF
-%     strFigureName = sprintf('%s_Iteration%d',mfilename,handles.Current.SetBeingAnalyzed);
-%     strPDFdir = strrep(handles.Current.DefaultOutputDirectory, 'BATCH', 'PDF');
-%     if ~fileattrib(strPDFdir)
-%         mkdir(strPDFdir);
-%         fprintf('%s: creating directory: ''%s''\n', mfilename, strPDFdir);
+% drawnow
+% 
+% % Create overlay images
+% imOutlineShapeSeparatedOverlay = input_image;
+% B = bwboundaries(logical(imFinalObjects),'holes');
+% imCutShapeObjectsLabel = label2rgb(bwlabel(imFinalObjects),'jet','k','shuffle');
+% 
+% % GUI
+% % CPfigure(handles,'Image',ThisModuleFigureNumber);
+% if CPisHeadless == false
+%     imDisplay = imSelected(:,:,1);
+%     subplot(2,2,2); CPimagesc(logical(imDisplay),handles);
+%     title(['Cut lines on selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%     hold on
+%     L = bwboundaries(logical(sum(imCutMask, 3)), 'noholes');
+%     for i = 1:length(L)
+%         line = L{i};
+%         plot(line(:,2), line(:,1), 'r', 'LineWidth', 3);
 %     end
-%     gcf2pdf(strPDFdir, strFigureName)
+%     hold off
+%     freezeColors
+%     subplot(2,2,1); CPimagesc(imDisplay,handles); colormap('jet'),
+%     title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%     freezeColors
+%     subplot(2,2,3); CPimagesc(imOutlineShapeSeparatedOverlay,handles);
+%     title(['Outlines of Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%     hold on
+%     for k = 1:length(B)
+%         boundary = B{k};
+%         plot(boundary(:,2), boundary(:,1), 'r', 'LineWidth', 1);
+%     end
+%     hold off
+%     freezeColors
+%     subplot(2,2,4); CPimagesc(imCutShapeObjectsLabel,handles);
+%     title(['Separated objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%     freezeColors
 % end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%Plot shape analysis data
-if strcmp(TestMode,'Yes')
-    if ~isempty(cellPerimeterProps)
-        for h = 1:CuttingPasses
-            imCurvature = zeros(size(input_image),'double');
-            imConvexConcave = zeros(size(input_image),'double');
-            imAngle = zeros(size(input_image),'double');
-            imRadius = zeros(size(input_image),'double');
-            for i = 1:length(cellPerimeterProps{h})
-                matCurrentObjectProps = cellPerimeterProps{h}{i};%get current object
-                imConcaveRegions = bwlabel(matCurrentObjectProps(:,11)==-1);
-                imConvexRegions = bwlabel(matCurrentObjectProps(:,11)==1);
-                AllRegions = imConcaveRegions+(max(imConcaveRegions)+imConvexRegions).*(imConvexRegions>0);%bwlabel only works binary, therefore label convex, concave seperately, then merger labels
-                NumRegions = length(setdiff(unique(AllRegions),0));
-                for j = 1:size(matCurrentObjectProps,1)%loop over all pixels of object to plot general properties
-                    imCurvature(matCurrentObjectProps(j,1),matCurrentObjectProps(j,2)) = matCurrentObjectProps(j,9);
-                    imConvexConcave(matCurrentObjectProps(j,1),matCurrentObjectProps(j,2)) = matCurrentObjectProps(j,11);
-                end
-                for k = 1:NumRegions%loop over all regions to plot region specific properties
-                    matCurrentRegionProps = matCurrentObjectProps(AllRegions==k,:);%get current region
-                    NormCurvature = matCurrentRegionProps(:,9);
-                    CurrentEqAngle = sum(NormCurvature);
-                    CurrentEqRadius = length(NormCurvature)/sum(NormCurvature);
-                    for L = 1:size(matCurrentRegionProps,1)%loop over all pixels in region
-                        imRadius(matCurrentRegionProps(L,1),matCurrentRegionProps(L,2)) = CurrentEqRadius;
-                        imAngle(matCurrentRegionProps(L,1),matCurrentRegionProps(L,2)) = radtodeg(CurrentEqAngle);
-                    end
-                end
-            end
-            CPfigure('Tag',strcat('ShapeAnalysisPass',num2str(h)));
-            
-            subplot(2,2,1);
-            CPimagesc(imCurvature,handles);
-            title(['Curvature image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
-            
-            subplot(2,2,2);
-            %problem with the CP image range scaling hack: while CPimagesc would
-            %accept the range as an argument, 'Open in new window' will ignore
-            %it. therefore the function has to be tricked somehow! solution:
-            %make rgb image with each channel binary
-            RGBConvexConcaveImage = cat(3,(imConvexConcave==1),(imConvexConcave==-1),zeros(size(imConvexConcave)));
-            CPimagesc(RGBConvexConcaveImage,handles);
-            title(['Convex concave image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
-            
-            subplot(2,2,3);
-            CPimagesc(imAngle,handles);
-            title(['Equivalent angle (degree) image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
-            
-            subplot(2,2,4);
-            CPimagesc(imRadius,handles);
-            title(['Equivalent radius, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
-        end
-    end
-end
-
-% Plot area/shape feature data
-if strcmp(TestMode2,'Yes')
-    if CPisHeadless == false
-        if ~isempty(cellPerimeterProps)
-            for h = 1:CuttingPasses
-                imSolidity = rplabel(logical(imObjects(:,:,h)), [], objSolidity{h});
-                imFormFactor = rplabel(logical(imObjects(:,:,h)), [], objFormFactor{h});
-                imArea = rplabel(logical(imObjects(:,:,h)), [], objArea{h});
-                
-                % could be nicely done with cbrewer() but stupid 'freezeColors'
-                % erases the indices!!! note that colorbars could be preserved
-                % with 'cbfreeze'
-                %             cmapR = cbrewer('seq', 'Reds', 9);
-                %             cmapG = cbrewer('seq', 'Greens', 9);
-                %             cmapB = cbrewer('seq', 'Blues', 9);
-                
-                CPfigure('Tag','Features for object selection')
-                subplot(2,2,1); CPimagesc(imSolidity,handles); %colormap(cmapR),
-                title(['Solidity of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-                subplot(2,2,2); CPimagesc(imFormFactor,handles); %colormap(cmapG),
-                title(['Form factor of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-                subplot(2,2,3); CPimagesc(imArea,handles); %colormap(cmapB),
-                title(['Area of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-                subplot(2,2,4); CPimagesc(imSelected(:,:,h),handles); colormap('jet');
-                title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-            end
-        end
-    end
-end
-
-% [TS if there is no background pixel: remove all
-% objects - otherwise one widespread assumption of CP is broken, leading to
-% various errors and problems in later modules]
-if ~any(imFinalObjects(:) == 0)
-   imFinalObjects = zeros(size(imFinalObjects));
-end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% SAVE DATA TO HANDLES STRUCTURE %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-fieldname = ['UneditedSegmented',ObjectName];%not edited for size or edge
-handles.Pipeline.(fieldname) = imFinalObjects;
-
-fieldname = ['SmallRemovedSegmented',ObjectName];%for IdentifySecondary.m
-handles.Pipeline.(fieldname) = imFinalObjects;
-
-fieldname = ['Segmented',ObjectName];%final label image
-handles.Pipeline.(fieldname) = imFinalObjects;
-
-%%% Saves location of each segmented object
-handles.Measurements.(ObjectName).LocationFeatures = {'CenterX','CenterY'};
-tmp = regionprops(imFinalObjects,'Centroid');
-Centroid = cat(1,tmp.Centroid);
-if isempty(Centroid)
-    Centroid = [0 0];   % follow CP's convention to save 0s if no object
-end
-handles.Measurements.(ObjectName).Location(handles.Current.SetBeingAnalyzed) = {Centroid};
-
-%%% Saves ObjectCount, i.e. number of segmented objects.
-if ~isfield(handles.Measurements.Image,'ObjectCountFeatures')
-    handles.Measurements.Image.ObjectCountFeatures = {};
-    handles.Measurements.Image.ObjectCount = {};
-end
-column = find(~cellfun('isempty',strfind(handles.Measurements.Image.ObjectCountFeatures,ObjectName)));
-if isempty(column)
-    handles.Measurements.Image.ObjectCountFeatures(end+1) = {ObjectName};
-    column = length(handles.Measurements.Image.ObjectCountFeatures);
-end
-handles.Measurements.Image.ObjectCount{handles.Current.SetBeingAnalyzed}(1,column) = max(imFinalObjects(:));
-
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % if strcmpi(savePDF, 'Yes')
+% %     % Save figure als PDF
+% %     strFigureName = sprintf('%s_Iteration%d',mfilename,handles.Current.SetBeingAnalyzed);
+% %     strPDFdir = strrep(handles.Current.DefaultOutputDirectory, 'BATCH', 'PDF');
+% %     if ~fileattrib(strPDFdir)
+% %         mkdir(strPDFdir);
+% %         fprintf('%s: creating directory: ''%s''\n', mfilename, strPDFdir);
+% %     end
+% %     gcf2pdf(strPDFdir, strFigureName)
+% % end
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% 
+% %Plot shape analysis data
+% if strcmp(TestMode,'Yes')
+%     if ~isempty(cellPerimeterProps)
+%         for h = 1:CuttingPasses
+%             imCurvature = zeros(size(input_image),'double');
+%             imConvexConcave = zeros(size(input_image),'double');
+%             imAngle = zeros(size(input_image),'double');
+%             imRadius = zeros(size(input_image),'double');
+%             for i = 1:length(cellPerimeterProps{h})
+%                 matCurrentObjectProps = cellPerimeterProps{h}{i};%get current object
+%                 imConcaveRegions = bwlabel(matCurrentObjectProps(:,11)==-1);
+%                 imConvexRegions = bwlabel(matCurrentObjectProps(:,11)==1);
+%                 AllRegions = imConcaveRegions+(max(imConcaveRegions)+imConvexRegions).*(imConvexRegions>0);%bwlabel only works binary, therefore label convex, concave seperately, then merger labels
+%                 NumRegions = length(setdiff(unique(AllRegions),0));
+%                 for j = 1:size(matCurrentObjectProps,1)%loop over all pixels of object to plot general properties
+%                     imCurvature(matCurrentObjectProps(j,1),matCurrentObjectProps(j,2)) = matCurrentObjectProps(j,9);
+%                     imConvexConcave(matCurrentObjectProps(j,1),matCurrentObjectProps(j,2)) = matCurrentObjectProps(j,11);
+%                 end
+%                 for k = 1:NumRegions%loop over all regions to plot region specific properties
+%                     matCurrentRegionProps = matCurrentObjectProps(AllRegions==k,:);%get current region
+%                     NormCurvature = matCurrentRegionProps(:,9);
+%                     CurrentEqAngle = sum(NormCurvature);
+%                     CurrentEqRadius = length(NormCurvature)/sum(NormCurvature);
+%                     for L = 1:size(matCurrentRegionProps,1)%loop over all pixels in region
+%                         imRadius(matCurrentRegionProps(L,1),matCurrentRegionProps(L,2)) = CurrentEqRadius;
+%                         imAngle(matCurrentRegionProps(L,1),matCurrentRegionProps(L,2)) = radtodeg(CurrentEqAngle);
+%                     end
+%                 end
+%             end
+%             CPfigure('Tag',strcat('ShapeAnalysisPass',num2str(h)));
+%             
+%             subplot(2,2,1);
+%             CPimagesc(imCurvature,handles);
+%             title(['Curvature image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
+%             
+%             subplot(2,2,2);
+%             %problem with the CP image range scaling hack: while CPimagesc would
+%             %accept the range as an argument, 'Open in new window' will ignore
+%             %it. therefore the function has to be tricked somehow! solution:
+%             %make rgb image with each channel binary
+%             RGBConvexConcaveImage = cat(3,(imConvexConcave==1),(imConvexConcave==-1),zeros(size(imConvexConcave)));
+%             CPimagesc(RGBConvexConcaveImage,handles);
+%             title(['Convex concave image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
+%             
+%             subplot(2,2,3);
+%             CPimagesc(imAngle,handles);
+%             title(['Equivalent angle (degree) image, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
+%             
+%             subplot(2,2,4);
+%             CPimagesc(imRadius,handles);
+%             title(['Equivalent radius, cycle # ',num2str(handles.Current.SetBeingAnalyzed),' Pass ',num2str(h)]);
+%         end
+%     end
+% end
+% 
+% % Plot area/shape feature data
+% if strcmp(TestMode2,'Yes')
+%     if CPisHeadless == false
+%         if ~isempty(cellPerimeterProps)
+%             for h = 1:CuttingPasses
+%                 imSolidity = rplabel(logical(imObjects(:,:,h)), [], objSolidity{h});
+%                 imFormFactor = rplabel(logical(imObjects(:,:,h)), [], objFormFactor{h});
+%                 imArea = rplabel(logical(imObjects(:,:,h)), [], objArea{h});
+%                 
+%                 % could be nicely done with cbrewer() but stupid 'freezeColors'
+%                 % erases the indices!!! note that colorbars could be preserved
+%                 % with 'cbfreeze'
+%                 %             cmapR = cbrewer('seq', 'Reds', 9);
+%                 %             cmapG = cbrewer('seq', 'Greens', 9);
+%                 %             cmapB = cbrewer('seq', 'Blues', 9);
+%                 
+%                 CPfigure('Tag','Features for object selection')
+%                 subplot(2,2,1); CPimagesc(imSolidity,handles); %colormap(cmapR),
+%                 title(['Solidity of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%                 subplot(2,2,2); CPimagesc(imFormFactor,handles); %colormap(cmapG),
+%                 title(['Form factor of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%                 subplot(2,2,3); CPimagesc(imArea,handles); %colormap(cmapB),
+%                 title(['Area of original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%                 subplot(2,2,4); CPimagesc(imSelected(:,:,h),handles); colormap('jet');
+%                 title(['Selected original objects, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
+%             end
+%         end
+%     end
+% end
+% 
+% % [TS if there is no background pixel: remove all
+% % objects - otherwise one widespread assumption of CP is broken, leading to
+% % various errors and problems in later modules]
+% if ~any(imFinalObjects(:) == 0)
+%    imFinalObjects = zeros(size(imFinalObjects));
+% end
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% SAVE DATA TO HANDLES STRUCTURE %%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% fieldname = ['UneditedSegmented',ObjectName];%not edited for size or edge
+% handles.Pipeline.(fieldname) = imFinalObjects;
+% 
+% fieldname = ['SmallRemovedSegmented',ObjectName];%for IdentifySecondary.m
+% handles.Pipeline.(fieldname) = imFinalObjects;
+% 
+% fieldname = ['Segmented',ObjectName];%final label image
+% handles.Pipeline.(fieldname) = imFinalObjects;
+% 
+% %%% Saves location of each segmented object
+% handles.Measurements.(ObjectName).LocationFeatures = {'CenterX','CenterY'};
+% tmp = regionprops(imFinalObjects,'Centroid');
+% Centroid = cat(1,tmp.Centroid);
+% if isempty(Centroid)
+%     Centroid = [0 0];   % follow CP's convention to save 0s if no object
+% end
+% handles.Measurements.(ObjectName).Location(handles.Current.SetBeingAnalyzed) = {Centroid};
+% 
+% %%% Saves ObjectCount, i.e. number of segmented objects.
+% if ~isfield(handles.Measurements.Image,'ObjectCountFeatures')
+%     handles.Measurements.Image.ObjectCountFeatures = {};
+%     handles.Measurements.Image.ObjectCount = {};
+% end
+% column = find(~cellfun('isempty',strfind(handles.Measurements.Image.ObjectCountFeatures,ObjectName)));
+% if isempty(column)
+%     handles.Measurements.Image.ObjectCountFeatures(end+1) = {ObjectName};
+%     column = length(handles.Measurements.Image.ObjectCountFeatures);
+% end
+% handles.Measurements.Image.ObjectCount{handles.Current.SetBeingAnalyzed}(1,column) = max(imFinalObjects(:));
+% 
 
 end
 end

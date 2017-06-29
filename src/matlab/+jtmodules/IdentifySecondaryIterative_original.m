@@ -10,7 +10,6 @@ methods (Static)
 function [FinalLabelMatrixImage, figure] =  main(PrelimPrimaryLabelMatrixImage, ...
                     OrigImage, ThresholdRange, iThresholdCorrection, plot)
 
-figure = '';
 
 % Help for the IdentifySecondaryIterative module:
 % Category: Object Processing
@@ -405,7 +404,7 @@ else % standard case
         InvertedThresholdedOrigImage = imcomplement(ThresholdedOrigImage);
         clear ThresholdedOrigImage;             %%% [PLab] hack. save memory.
         
-        save('/home/tissuemaps/test.mat');
+%         save('/home/tissuemaps/test.mat');
 
         %%% STEP 3: Produce the marker image which will be used for the first
         %%% watershed.
@@ -992,6 +991,13 @@ drawnow
     % end
 % end
 
+if plot
+        plots = { ...
+                jtlib.plotting.create_intensity_image_plot(FinalLabelMatrixImage, 'ul')};
+                figure = jtlib.plotting.create_figure(plots);
+else
+    figure = '';
+end
 
 end
 
