@@ -208,8 +208,8 @@ end
 %%% real - not on the edges and not below or above the specified size
 %%% limits. Checks first to see whether the appropriate image exists.
 
-EditedPrimaryLabelMatrixImage = PrimaryObjectName;
-
+%EditedPrimaryLabelMatrixImage = PrimaryObjectName;
+EditedPrimaryLabelMatrixImage = PrelimPrimaryLabelMatrixImage;
 % EditedPrimaryLabelMatrixImage = CPretrieveimage(handles,['Segmented', PrimaryObjectName],ModuleName,'DontCheckColor','DontCheckScale',size(OrigImage));
 
 %%% Chooses the first word of the method name (removing 'Global' or 'Adaptive').
