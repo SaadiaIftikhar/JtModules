@@ -96,6 +96,12 @@ input:
       empirically determine optimal values for `min_angle` and `max_radius`
       (results will be shown for the last cutting pass).
 
+  - name: LowerSizeCutThres
+    type: Numeric
+    value: 5000
+    help: >
+      Minimal area that cut objects should have.
+
   - name: plot
     type: Plot
     value: false
