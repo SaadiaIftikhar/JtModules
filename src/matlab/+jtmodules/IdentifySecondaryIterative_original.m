@@ -8,7 +8,7 @@ end
 methods (Static)    
 
 function handles = main(PrelimPrimaryLabelMatrixImage, ...
-                    iThresholdCorrection, ThresholdRange, OrigImage)
+                    iThresholdCorrection, ThresholdRange, OrigImage, plot=False)
 
 % Help for the IdentifySecondaryIterative module:
 % Category: Object Processing
