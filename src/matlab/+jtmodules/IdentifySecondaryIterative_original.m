@@ -8,7 +8,7 @@ end
 methods (Static)    
 
 function [FinalLabelMatrixImage, figure] =  main(PrelimPrimaryLabelMatrixImage, ...
-                    iThresholdCorrection, ThresholdRange, OrigImage, plot)
+                    OrigImage, ThresholdRange, iThresholdCorrection, plot)
 
 % Help for the IdentifySecondaryIterative module:
 % Category: Object Processing
@@ -403,6 +403,8 @@ else % standard case
         InvertedThresholdedOrigImage = imcomplement(ThresholdedOrigImage);
         clear ThresholdedOrigImage;             %%% [PLab] hack. save memory.
         
+        save('/home/tissuemaps/test.mat');
+
         %%% STEP 3: Produce the marker image which will be used for the first
         %%% watershed.
 
