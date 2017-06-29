@@ -368,7 +368,7 @@ end
 Threshold = ThresholdCorrection*Threshold;
 Threshold = max(Threshold,MinimumThreshold);
 Threshold = min(Threshold,MaximumThreshold);
-handles = CPaddmeasurements(handles,'Image','OrigThreshold',[ObjectVar,ImageName],mean(mean(Threshold)));
+%handles = CPaddmeasurements(handles,'Image','OrigThreshold',[ObjectVar,ImageName],mean(mean(Threshold)));
 
 
 %%%%%%%%%%%%%%%%%%%%
