@@ -226,13 +226,16 @@ else
 end
 
 %%% Checks that the Min and Max threshold bounds have valid values
-index = strfind(ThresholdRange,',');
-if isempty(index)
-    error(['Image processing was canceled in the ', ModuleName, ' module because the Min and Max threshold bounds are invalid.'])
-end
+%index = strfind(ThresholdRange,',');
+%if isempty(index)
+ %   error(['Image processing was canceled in the ', ModuleName, ' module because the Min and Max threshold bounds are invalid.'])
+%end
 
-MinimumThreshold = str2double(ThresholdRange(1:index-1));
-MaximumThreshold = str2double(ThresholdRange(index+1:end));
+%MinimumThreshold = str2double(ThresholdRange(1:index-1));
+%MaximumThreshold = str2double(ThresholdRange(index+1:end));
+
+MinimumThreshold = min(ThresholdRange(1:index-1));
+MaximumThreshold = max(ThresholdRange(index+1:end));
 
 % Create vector containing the thresholds that should be tested
 [isSafe, iThresholdCorrection]= inputVectorsForEvalCP3D(iThresholdCorrection,false);
