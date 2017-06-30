@@ -1,4 +1,4 @@
-classdef IdentifyPrimIterative_original < handle
+classdef PrimIterative_original < handle
 
 properties (Constant)
 
