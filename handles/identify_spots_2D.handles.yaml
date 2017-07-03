@@ -1,5 +1,5 @@
 ---
-version: 0.1.0
+version: 0.0.1
 
 input:
 
@@ -8,13 +8,6 @@ input:
       key:
       help: >
         Grayscale image in which spots should be detected.
-
-    - name: mask
-      type: LabelImage
-      key:
-      help: >
-          Binary or labeled image of objects in which spots should be
-          detected (e.g. cell segmentation image).
 
     - name: spot_size
       type: Numeric
@@ -26,9 +19,9 @@ input:
           value does not affect the number of spots, if spots are bright (eg.
           pixel size 5 or 6).
 
-    - name: rescale_quantile_min
-      type: Numeric
-      value: 0.01
+    - name: rescale_quantiles
+      type: Sequence
+      value: [0.01, 0.99]
       help: >
           Prior to spot detection the images are rescaled according to their
           intensity. Since the specific value of minimal and maximal intensities
@@ -40,46 +33,28 @@ input:
           maximum intensity is derived from the pixel, which is the 90% brightest
           pixel.
 
-    - name: rescale_quantile_max
-      type: Numeric
-      value: 0.99
+    - name: rescale_thresholds
+      type: Sequence
+      value: [0, 120, 500, 0]
       help: >
-          See above.
-
-    - name: min_of_min
-      type: Numeric
-      value: 0
-      help: >
-          Absolute limit for quantile-based image rescaling (lowest min.). Enter ``0`` for ``NaN``.
-
-    - name: max_of_min
-      type: Numeric
-      value: 120
-      help: >
-          Absolute limit for quantile-based image rescaling (highest min.). Enter ``0`` for ``NaN``.
-
-    - name: min_of_max
-      type: Numeric
-      value: 500
-      help: >
-          Absolute limit for quantile-based image rescaling (lowest max.). Enter ``0`` for ``NaN``.
-
-    - name: max_of_max
-      type: Numeric
-      value: 0
-      help: >
-          Absolute limit for quantile-based image rescaling (highest max.). Enter ``0`` for ``NaN``.
+          Most extreme values that the image intensity minimum and image
+          intensity maximum (as defined by the quanta) are allowed to
+          have [LowestPossibleGreyscaleValueForImageMinimum
+          HighestPossibleGreyscaleValueForImageMinimum
+          LowestPossibleGreyscaleValueForImageMaximum
+          HighestPossibleGreyscaleValueForImageMaximum].
+          To ignore individual values, place 0.
 
     - name: detection_threshold
       type: Numeric
       value: 0.02
       help: >
           Threshold for spot detection intensity in rescaled image (default:
-          ``0.02``). The higher the value, the more stringent spot detection is.
+          0.02). The higher the value, the more stringent spot detection is.
 
     - name: deblending_steps
       type: Numeric
-      value: 20
+      value: 30
       help: >
           The amount of deblending steps, which are done. The higher it is the less
           likely it is that two adjacent spots are not separated. The default of 30
@@ -103,6 +78,13 @@ output:
       type: LabelImage
       key: identify_spots_2D.spots
       help: Labelled centroids of spots identified in the image.
+
+    - name: spots_deblend
+      type: LabelImage
+      key: identify_spots_2D.spots_deblend
+      help: >
+          Labelled centroids of spots identified in the image after
+          deblending.
 
     - name: figure
       type: Figure
