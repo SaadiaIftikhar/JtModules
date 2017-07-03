@@ -1,0 +1,42 @@
+---
+version: 0.0.3
+
+input:
+
+    - name: matImpSpotFeatures
+      type: Measurement
+      key:
+      help: >
+        Labeled image with registered objects
+        for which point pattern features should be extracted.
+
+    - name: matParentCount
+      type: Measurement
+      key:
+      help: >
+        The number of parent objects.
+
+    - name: matParentObject
+      type: Measurement
+      value: false
+      help: >
+        Get the ID of the parent for each child.
+
+    - name: plot
+      type: Plot
+      value: false
+      help: Should a figure be created?
+
+output:
+
+    - name: measuremnets
+      type: Measurement
+      objects: assign_objects
+      objects_ref: extract_objects
+      help: Extracted point pattern features.
+
+    - name: figure
+      type: Figure
+
+
+
