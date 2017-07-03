@@ -102,6 +102,15 @@ input:
     help: >
       Minimal area that cut objects should have.
 
+  - name: DebugMode
+    type: Boolean
+    value: false
+    options:
+      - false
+      - true
+    help: >
+      start debugging the code.
+
   - name: plot
     type: Plot
     value: false
