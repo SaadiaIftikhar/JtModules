@@ -247,14 +247,14 @@ function [imFinalObjects, figure] =  main(input_image, CuttingPasses, ...
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% LOAD IMAGES FROM HANDLES %%
+% LOAD IMAGES FROM HANDLES %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % input_image = handles.Pipeline.(ImageName);
 
 
 %%%%%%%%%%%%%%%%%%%%
-%% IMAGE ANALYSIS %%
+% IMAGE ANALYSIS %%
 %%%%%%%%%%%%%%%%%%%%
 
 Threshold = 'Otsu Global';
@@ -483,7 +483,7 @@ else
 end
 
 %%%%%%%%%%%%%%%%%%%%%
-%% DISPLAY RESULTS %%
+% DISPLAY RESULTS %%
 %%%%%%%%%%%%%%%%%%%%%
 
 % drawnow
