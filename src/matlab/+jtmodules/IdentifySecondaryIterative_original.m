@@ -136,24 +136,9 @@ function [FinalLabelMatrixImage, figure] =  main(PrelimPrimaryLabelMatrixImage, 
 %%%%%%%%%%%%%%%%%
 drawnow
 
-% [CurrentModule, CurrentModuleNum, ModuleName] = CPwhichmodule(handles);
-
-%textVAR01 = What did you call the primary objects you want to create secondary objects around?
-%infotypeVAR01 = objectgroup
 PrimaryObjectName = 'PrimaryObject';
-%inputtypeVAR01 = popupmenu
- 
-%textVAR02 = What do you want to call the objects identified by this module?
-%defaultVAR02 = Cells
-%infotypeVAR02 = objectgroup indep
 SecondaryObjectName = 'SecondaryObject';
-
 ImageName = 'Image';
-
-%textVAR03 = What did you call the images to be used to find the edges of the secondary objects?
-%infotypeVAR03 = imagegroup
-% ImageName = char(handles.Settings.VariableValues{CurrentModuleNum,3});
-%inputtypeVAR03 = popupmenu
 
 ModuleName = 'SecondaryIterativeWatershed'; 
 handles.Settings.CurrentModule = 'SecondaryIterativeWatershed'; 
@@ -164,16 +149,6 @@ handles.Settings.ImageName = 'Image';
 handles.Settings.ThresholdCorrection = iThresholdCorrection; 
 handles.Settings.ThresholdRange = ThresholdRange; 
  
-%textVAR04 = Lower and upper bounds on threshold, in the range [0,1]. Pixels with an intensity below the lower bound will never be part of a secondary object.
-%defaultVAR04 = 0.0019,1
-% ThresholdRange = char(handles.Settings.VariableValues{CurrentModuleNum,4});
-
-%textVAR05 = Threshold correction factors. In descending ranking. eg 0.9 0.8 0.7
-%defaultVAR05 = 2 1.5 1.3 0.9 0.7 0.6 0.58 0.55 0.50 0.45 0.4 0.35 0.3 0.25
-% iThresholdCorrection = char(handles.Settings.VariableValues{CurrentModuleNum,5});
-
-%%%VariableRevisionNumber = 3
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% PRELIMINARY CALCULATIONS & FILE HANDLING %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -815,181 +790,11 @@ clear EditedPrimaryLabelMatrixImage;
 
 FinalLabelMatrixImage = int32(FinalLabelMatrixImage);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% SAVE DATA TO HANDLES STRUCTURE %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-drawnow
-
-%%% Saves the final, segmented label matrix image of secondary objects to
-%%% the handles structure so it can be used by subsequent modules.
-fieldname = ['Segmented',SecondaryObjectName];
-%handles.Pipeline.(fieldname) = FinalLabelMatrixImage;
-
-%[PLab removed propagation]
-
-%%% Saves the ObjectCount, i.e. the number of segmented objects.
-%if ~isfield(handles.Measurements.Image,'ObjectCountFeatures')
- %   handles.Measurements.Image.ObjectCountFeatures = {};
- %   handles.Measurements.Image.ObjectCount = {};
-%end
-%column = find(~cellfun('isempty',strfind(handles.Measurements.Image.ObjectCountFeatures,SecondaryObjectName)));
-%if isempty(column)
- %   handles.Measurements.Image.ObjectCountFeatures(end+1) = {SecondaryObjectName};
- %   column = length(handles.Measurements.Image.ObjectCountFeatures);
-%end
-%handles.Measurements.Image.ObjectCount{handles.Current.SetBeingAnalyzed}(1,column) = max(FinalLabelMatrixImage(:));
-
-%%% Saves the location of each segmented object
-%handles.Measurements.(SecondaryObjectName).LocationFeatures = {'CenterX','CenterY'};
-%tmp = regionprops(FinalLabelMatrixImage,'Centroid');
-%%% [PLab] hack. save memory.
-%Centroid = cat(1,tmp.Centroid);
-%if isempty(Centroid)
- %   Centroid = [0 0];   % follow CP's convention to save 0s if no object
-%end
-%handles.Measurements.(SecondaryObjectName).Location(handles.Current.SetBeingAnalyzed) = {Centroid};
-
-% [PLab] note that the following CP code would require additional
-% calculations, which as default were always done and also used for
-% visualization. If it should be included again, the code either has to be
-% arranged back or , better, a check included, whether the outline should
-% be saved
-% %%% Saves images to the handles structure so they can be saved to the hard
-% %%% drive, if the user requested.
-% try
-%     if ~strcmpi(SaveOutlines,'Do not save')
-%         handles.Pipeline.(SaveOutlines) = LogicalOutlines;
-%     end
-% catch dummyError %[PLab] bugfix for error message
-%     error(['The object outlines were not calculated by the ', ModuleName, ' module, so these images were not saved to the handles structure. The Save Images module will therefore not function on these images. This is just for your information - image processing is still in progress, but the Save Images module will fail if you attempted to save these images.'])
-% end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %%% DISPLAY RESULTS %%%
 %%%%%%%%%%%%%%%%%%%%%%%
-drawnow
-
-%ThisModuleFigureNumber = handles.Current.(['FigureNumberForModule',CurrentModule]);
-%if any(findobj == ThisModuleFigureNumber)
-    
- %   if CPisHeadless == false
-        
-        %%%% [PLab] %%%%%%%%%%%%%%%%%%%%%%%%%%%%% Code for visualization  %%%%%%%%%%%
-        %%%%%%% Rearranged: Inculde visualization into a conditional statement starting
-        %%%%%%% only on local machine, but not CPCluster
-        
-        
-        %%% Calculates the ColoredLabelMatrixImage for displaying in the figure
-        %%% window in subplot(2,2,2).
-  %      ColoredLabelMatrixImage = CPlabel2rgb(handles,FinalLabelMatrixImage);
-        %%% Calculates OutlinesOnOrigImage for displaying in the figure
-        %%% window in subplot(2,2,3).
-        %%% Note: these outlines are not perfectly accurate; for some reason it
-        %%% produces more objects than in the original image.  But it is OK for
-        %%% display purposes.
-        %%% Maximum filters the image with a 3x3 neighborhood.
-   %     MaxFilteredImage = ordfilt2(FinalLabelMatrixImage,9,ones(3,3),'symmetric');
-        %%% Determines the outlines.
-   %     IntensityOutlines = FinalLabelMatrixImage - MaxFilteredImage;
-        %%% [PLab] hack.s ave memory.
-    %    clear MaxFilteredImage;
-        %%% Converts to logical.
-     %   warning off MATLAB:conversionToLogical
-     %   LogicalOutlines = logical(IntensityOutlines);
-        %%% [PLab] hack.s ave memory.
-      %  clear IntensityOutlines;
-      %  warning on MATLAB:conversionToLogical
-        
-        % Determines the grayscale intensity to use for the cell outlines.
-        %[PLab-HACK] so that images are not so dim!!!!
-       % ObjectOutlinesOnOrigImage = OrigImage;
-        
-        % [TS150825: deactivated rescaling, which is not working fine, and
-        % missleading on compressed cells, e.g.: cytoo chips]
-        %         ObjectOutlinesOnOrigImage=ObjectOutlinesOnOrigImage-quantile(OrigImage(:), 0.025);
-        %         ObjectOutlinesOnOrigImage(ObjectOutlinesOnOrigImage<0)=0;
-        %         ObjectOutlinesOnOrigImage(ObjectOutlinesOnOrigImage>quantile(ObjectOutlinesOnOrigImage(:), 0.95))=quantile(ObjectOutlinesOnOrigImage(:), 0.95);
-        %         LineIntensity = quantile(ObjectOutlinesOnOrigImage(:), 0.99);
-        %         ObjectOutlinesOnOrigImage(LogicalOutlines) = LineIntensity;
-        
-        % qmin = quantile(ObjectOutlinesOnOrigImage(:),0.01); % [TS] Keep intention of original code by rescaling without outliers
-        % qmax = quantile(ObjectOutlinesOnOrigImage(:),0.99);
-        % ObjectOutlinesOnOrigImage(ObjectOutlinesOnOrigImage < qmin) = qmin;
-       % ObjectOutlinesOnOrigImage(ObjectOutlinesOnOrigImage > qmax) = qmax;
-       % ObjectOutlinesOnOrigImage = (ObjectOutlinesOnOrigImage-qmin) ./ (qmax-qmin);
-        
-        % [TS] Display outlines in red rather than white (useful for cytoo chips);
-        % ObjectOutlinesOnOrigImage = insertRedLine(ObjectOutlinesOnOrigImage, LogicalOutlines);        
-
-        
-        %%% Calculates BothOutlinesOnOrigImage for displaying in the figure
-        %%% window in subplot(2,2,4).
-        %%% Creates the structuring element that will be used for dilation.
-       % StructuringElement = strel('square',3);
-        %%% Dilates the Primary Binary Image by one pixel (8 neighborhood).
-       % DilatedPrimaryBinaryImage = imdilate(EditedPrimaryBinaryImage, StructuringElement);
-        %%% Subtracts the PrelimPrimaryBinaryImage from the DilatedPrimaryBinaryImage,
-        %%% which leaves the PrimaryObjectOutlines.
-        % PrimaryObjectOutlines = DilatedPrimaryBinaryImage - EditedPrimaryBinaryImage;
-        %%% [PLab] hack. save memory.
-       % clear DilatedPrimaryBinaryImage EditedPrimaryBinaryImage;
-        %         BothOutlinesOnOrigImage = ObjectOutlinesOnOrigImage;
-        %       BothOutlinesOnOrigImage(PrimaryObjectOutlines == 1) = LineIntensity;
-        
-        % [TS] Display outlines in red rather than white (useful for cytoo chips);
-       % BothOutlinesOnOrigImage = insertRedLine(ObjectOutlinesOnOrigImage, PrimaryObjectOutlines == 1);        
-        
-        %%% [PLab] hack. save memory.
-        %clear PrimaryObjectOutlines LineIntensity;
-        
-        %%%%%%%%%%%%%%%%%%%%%%%% END OF INITIATION OF VISUALIZATION
-        %%%%%%%%%%%%%%%%%%%%%%%% (rearrangement)
-        
-        
-        %%% Activates the appropriate figure window.
-        %CPfigure(handles,'Image',ThisModuleFigureNumber);
-       % if handles.Current.SetBeingAnalyzed == handles.Current.StartingImageSet
-        %    CPresizefigure(OrigImage,'TwoByTwo',ThisModuleFigureNumber);
-        %end
-       % ObjectCoverage = 100*sum(sum(FinalLabelMatrixImage > 0))/numel(FinalLabelMatrixImage);
-        
-        %[PLab] display range of thresholds. Which is useful if limits for treshold
-        %should be used
-        %     uicontrol(ThisModuleFigureNumber,'Style','Text','Units','Normalized','Position',[0.25 0.01 .6 0.04],...
-        %         'BackgroundColor',[.7 .7 .9],'HorizontalAlignment','Left','String',sprintf('Threshold:  %0.3f               %0.1f%% of image consists of objects',Threshold,ObjectCoverage),'FontSize',handles.Preferences.FontSize);
-        
-        
-        %ThresholdFirst  = ThresholdArray{1};
-       % ThresholdLast = ThresholdArray{numThresholdsToTest};
-        % uicontrol(ThisModuleFigureNumber,'Style','Text','Units','Normalized','Position',[0.25 0.01 .6 0.04],...
-          %  'BackgroundColor',[.7 .7 .9],'HorizontalAlignment','Left','String',sprintf('Threshold: Start %0.5f End %0.5f                %0.1f%% of image consists of objects',ThresholdFirst,ThresholdLast,ObjectCoverage),'FontSize',handles.Preferences.FontSize);
-        
-        %%% A subplot of the figure window is set to display the original image.
-       % subplot(2,2,1);
-       % CPimagesc(OrigImage,handles);
-       % title(['Input Image, cycle # ',num2str(handles.Current.SetBeingAnalyzed)]);
-        %%% A subplot of the figure window is set to display the colored label
-        %%% matrix image.
-       % subplot(2,2,2);
-       % CPimagesc(ColoredLabelMatrixImage,handles);
-       %  clear ColoredLabelMatrixImage
-       % title(['Outlined ',SecondaryObjectName]);
-        %%% A subplot of the figure window is set to display the original image
-        %%% with secondary object outlines drawn on top.
-       %  subplot(2,2,3);
-       %  CPimagesc(ObjectOutlinesOnOrigImage,handles);
-       %  clear ObjectOutlinesOnOrigImage
-       % title([SecondaryObjectName, ' Outlines on Input Image']);
-        %%% A subplot of the figure window is set to display the original
-        %%% image with outlines drawn for both the primary and secondary
-        %%% objects.
-        % subplot(2,2,4);
-        % CPimagesc(BothOutlinesOnOrigImage,handles);
-        % clear BothOutlinesOnOrigImage;
-        % title(['Outlines of ', PrimaryObjectName, ' and ', SecondaryObjectName, ' on Input Image']);
-    % end
-% end
 
 if plot
         plots = { ...
