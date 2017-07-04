@@ -54,6 +54,7 @@ input:
 
   - name: TestMode2
     type: Boolean
+    key: 
     value: false
     options:
       - false
@@ -87,6 +88,7 @@ input:
 
   - name: TestMode
     type: Boolean
+    key: 
     value: false
     options:
       - false
@@ -114,6 +116,7 @@ input:
 
   - name: plot
     type: Plot
+    key: 
     value: false
     options: [true, false]
     help: Should a figure be created?
@@ -127,6 +130,8 @@ output:
 
   - name: fig
     type: Figure
+    key: 
+    value: false
 
 
 

@@ -28,6 +28,7 @@ input:
 
   - name: plot
     type: Plot
+    key: 
     value: false
     options: [true, false]
     help: Should a figure be created?
@@ -41,6 +42,8 @@ output:
 
   - name: fig
     type: Figure
+    key: 
+    value: false
     help: >
       Identified objects in <i>output_label_image</i> and overlay of object
       outlines on <i>intensity_image</i>.
