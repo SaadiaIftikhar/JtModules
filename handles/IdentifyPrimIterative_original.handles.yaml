@@ -9,19 +9,16 @@ input:
 
   - name: CuttingPasses
     type: Numeric
-    key: 
     value: 2
     help: Number of cutting rounds that should be applied.
 
   - name: ThresholdCorrection
     type: Numeric
-    key: 
     value: 2
     help: Intensity thresholding. Threshold correction factor.
 
   - name: ThresholdRange
     type: Sequence
-    key: 
     value: [20.0019,0.02]
     help: >
       Intensity thresholding. Lower and upper bounds on threshold, 
@@ -29,7 +26,6 @@ input:
 
   - name: SolidityThres
     type: Numeric
-    key: 
     value: 0.92
     help: >
       Maximal solidity value for a continuous pixel region
@@ -37,7 +33,6 @@ input:
 
   - name: FormFactorThres
     type: Numeric
-    key: 
     value: 0.40
     help: >
       Minimal (negative) form factor value for a continuous pixel region
@@ -45,7 +40,6 @@ input:
 
   - name: LowerSizeThres
     type: Numeric
-    key: 
     value: 5000
     help: >
       Minimal area value for a continuous pixel region
@@ -53,7 +47,6 @@ input:
 
   - name: UpperSizeThres
     type: Numeric
-    key: 
     value: 50000
     help: >
       Maximal area value for a continuous pixel region
@@ -73,7 +66,6 @@ input:
 
   - name: smoothingDiskSize
     type: Numeric
-    key: 
     value: 2
     help: >
       Size of the smoothing filter that is applied to the mask prior to
@@ -81,19 +73,16 @@ input:
 
   - name: WindowSize
     type: Numeric
-    key: 
     value: 9
     help: Size of the sliding window used for perimeter analysis.
 
   - name: PerimSegEqSegment
     type: Numeric
-    key: 
     value: 6
     help: Minimal equivalent angle of the concave region.
 
   - name: PerimSegEqRadius
     type: Numeric
-    key: 
     value: 30
     help: Perimeter analysis. Maximum concave region equivalent RADIUS.
 
@@ -111,7 +100,6 @@ input:
 
   - name: LowerSizeCutThres
     type: Numeric
-    key: 
     value: 5000
     help: >
       Minimal area that cut objects should have.
@@ -128,7 +116,6 @@ input:
 
   - name: plot
     type: Plot
-    key: 
     value: false
     options: [true, false]
     help: Should a figure be created?
@@ -142,7 +129,6 @@ output:
 
   - name: fig
     type: Figure
-    key: 
 
 
 
