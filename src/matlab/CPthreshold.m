@@ -1,4 +1,4 @@
-function [Threshold] = CPthreshold(handles,Threshold,pObject,MinimumThreshold,MaximumThreshold,ThresholdCorrection,OrigImage,ImageName,ModuleName,ObjectName)
+function [handles,Threshold] = CPthreshold(handles,Threshold,pObject,MinimumThreshold,MaximumThreshold,ThresholdCorrection,OrigImage,ImageName,ModuleName,ObjectName)
 
 % CellProfiler is distributed under the GNU General Public License. See the
 % accompanying file LICENSE for details.
@@ -366,8 +366,8 @@ end
 %%% make sure that the threshold is not larger than the minimum threshold
 
 Threshold = ThresholdCorrection*Threshold;
-[Threshold] = max(max(Threshold(:),MinimumThreshold));
-[Threshold] = min(min(Threshold(:),MaximumThreshold));
+[Threshold] = max(Threshold(:),MinimumThreshold);
+[Threshold] = min(Threshold(:),MaximumThreshold);
 
 % handles = CPaddmeasurements('Image','OrigThreshold',[ObjectVar,ImageName],mean(mean(Threshold)));
 

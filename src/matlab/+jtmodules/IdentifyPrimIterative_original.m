@@ -79,7 +79,7 @@ MaximumThreshold = max(ThresholdRange);
 
 if GetThreshold
     input_image(input_image > quantile(input_image(:), 0.999)) = quantile(input_image(:), 0.999);
-    [OrigThreshold] = CPthreshold(handles,Threshold,pObject,MinimumThreshold,MaximumThreshold,ThresholdCorrection,input_image,ImageName,ModuleName,ObjectName);
+    [handles,OrigThreshold] = CPthreshold(handles,Threshold,pObject,MinimumThreshold,MaximumThreshold,ThresholdCorrection,input_image,ImageName,ModuleName,ObjectName);
 else
     OrigThreshold = 0;
 end
