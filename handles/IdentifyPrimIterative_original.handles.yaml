@@ -9,45 +9,45 @@ input:
 
   - name: CuttingPasses
     type: Numeric
-    value: 2
+    value: 5
     help: Number of cutting rounds that should be applied.
 
   - name: ThresholdCorrection
     type: Numeric
-    value: 2
+    value: 0.95
     help: Intensity thresholding. Threshold correction factor.
 
   - name: ThresholdRange
     type: Sequence
-    value: [20.0019,0.02]
+    value: [0.00305175781,1]
     help: >
       Intensity thresholding. Lower and upper bounds on threshold, 
       in the range [0,1].
 
   - name: SolidityThres
     type: Numeric
-    value: 0.92
+    value: 0.90
     help: >
       Maximal solidity value for a continuous pixel region
       to be considered a clump.
 
   - name: FormFactorThres
     type: Numeric
-    value: 0.40
+    value: 0.50
     help: >
       Minimal (negative) form factor value for a continuous pixel region
       to be considered a clump.
 
   - name: LowerSizeThres
     type: Numeric
-    value: 5000
+    value: 900
     help: >
       Minimal area value for a continuous pixel region
       to be considered a clump.
 
   - name: UpperSizeThres
     type: Numeric
-    value: 50000
+    value: 500000
     help: >
       Maximal area value for a continuous pixel region
       to be considered a clump.
@@ -55,9 +55,7 @@ input:
   - name: TestMode2
     type: Boolean
     value: false
-    options:
-      - false
-      - true
+    options: [true, false]
     help: >
       Whether selected clumps should be plotted in order to empirically determine 
       optimal values for <max_solidity>, <min_formfactor>, min_area and
@@ -65,19 +63,19 @@ input:
 
   - name: smoothingDiskSize
     type: Numeric
-    value: 2
+    value: 3
     help: >
       Size of the smoothing filter that is applied to the mask prior to
       perimeter analysis.
 
   - name: WindowSize
     type: Numeric
-    value: 9
+    value: 3
     help: Size of the sliding window used for perimeter analysis.
 
   - name: PerimSegEqSegment
     type: Numeric
-    value: 6
+    value: 7
     help: Minimal equivalent angle of the concave region.
 
   - name: PerimSegEqRadius
@@ -88,9 +86,7 @@ input:
   - name: TestMode
     type: Boolean
     value: false
-    options:
-      - false
-      - true
+    options: [true, false]
     help: >
       Whether result of the perimeter analysis should be plotted in order to
       empirically determine optimal values for min_angle and max_radius
@@ -98,16 +94,14 @@ input:
 
   - name: LowerSizeCutThres
     type: Numeric
-    value: 5000
+    value: 700
     help: >
       Minimal area that cut objects should have.
 
   - name: DebugMode
     type: Boolean 
     value: false
-    options:
-      - false
-      - true
+    options: [true, false]
     help: >
       start debugging the code.
 
@@ -126,8 +120,8 @@ output:
 
   - name: fig
     type: Figure
-    key: 
     value: false
+    options: [true, false]
 
 
 
