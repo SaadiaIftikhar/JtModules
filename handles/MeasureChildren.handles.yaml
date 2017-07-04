@@ -18,12 +18,14 @@ input:
 
     - name: matParentObject
       type: Measurement
+      key: 
       value: false
       help: >
         Get the ID of the parent for each child.
 
     - name: plot
       type: Plot
+      key: 
       value: false
       help: Should a figure be created?
 
@@ -31,6 +33,7 @@ output:
 
     - name: measuremnets
       type: Measurement
+      key: 
       objects: assign_objects
       objects_ref: extract_objects
       help: Extracted point pattern features.

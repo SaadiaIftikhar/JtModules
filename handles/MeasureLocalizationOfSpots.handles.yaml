@@ -17,6 +17,7 @@ input:
 
      - name: DilationFactor
       type: Numeric
+      key: 
       value: 10
       help: What is the distance between two neighbouring cells? (pixel) recommended: 10
 
@@ -24,46 +25,52 @@ input:
       type: Sequence
       key:  [0.10 0.25 0.50 0.75]
       help: >
-        Distance(s) required to cover this / these fraction(s) of sibling spots (values between 0 and 1).
+        Distance(s) required to cover this or these fraction(s) of sibling spots (values between 0 and 1).
 
     - name: matRadiousVector
       type: Sequence
       key:  [40 90]
       help: >
-        Fraction of siblings at this / these distances (pixels).
+        Fraction of siblings at this or these distances (pixels).
 
     - name: ThirdStatus
       type: Binary
+      key: 
       value: false
       options: [true, false]
       help: Should a figure be created?
 
     - name: matChildrenLocation
       type: Measurement
+      key: 
       value: false
       help: >
         retrieve the location of the children.
 
     - name: matParentObject 
       type: Measurement
+      key: 
       value: false
       help: >
         rget the ID of the parents of each child (spot).
 
     - name: matParentLocation
       type: Measurement
+      key: 
       value: false
       help: >
         get parent object centroid coordinates
 
     - name: matThirdLocation
       type: Measurement
+      key: 
       value: false
       help: >
         get third object centroid coordinates.
 
     - name: plot
       type: Plot
+      key: 
       value: false
       help: Should a figure be created?
 
@@ -71,12 +78,14 @@ output:
 
     - name: matLocMeasurementsZScored
       type: Measurement
+      key: 
       objects: assign_objects
       objects_ref: extract_objects
       help: Extracted point pattern features.
 
     - name: figure
       type: Figure
+      key: 
 
 
 
