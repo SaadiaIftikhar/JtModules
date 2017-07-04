@@ -14,7 +14,6 @@ input:
 
   - name: ThresholdRange
     type: Sequence
-    key: 
     value: [20.0019,0.02]
     help: >
       Intensity thresholding: Lower and upper bounds on threshold, 
@@ -22,7 +21,6 @@ input:
 
   - name: iThresholdCorrection
     type: Sequence
-    key: 
     value: [2, 1.5, 1.3, 0.9, 0.7, 0.6, 0.58, 0.55, 0.50, 0.45, 0.4, 0.35, 0.3, 0.25]
     help: >
       Threshold correction factors that are multiplied with calculated
@@ -30,7 +28,6 @@ input:
 
   - name: plot
     type: Plot
-    key: 
     value: false
     options: [true, false]
     help: Should a figure be created?
@@ -44,7 +41,6 @@ output:
 
   - name: fig
     type: Figure
-    key: 
     help: >
       Identified objects in <i>output_label_image</i> and overlay of object
       outlines on <i>intensity_image</i>.

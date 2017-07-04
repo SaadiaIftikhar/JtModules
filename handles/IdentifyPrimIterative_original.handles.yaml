@@ -54,7 +54,6 @@ input:
 
   - name: TestMode2
     type: Boolean
-    key: 
     value: false
     options:
       - false
@@ -88,7 +87,6 @@ input:
 
   - name: TestMode
     type: Boolean
-    key: 
     value: false
     options:
       - false
