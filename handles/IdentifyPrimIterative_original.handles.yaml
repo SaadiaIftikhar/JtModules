@@ -54,7 +54,6 @@ input:
 
   - name: TestMode2
     type: Boolean
-    key: 
     value: false
     options:
       - false
@@ -88,7 +87,6 @@ input:
 
   - name: TestMode
     type: Boolean
-    key: 
     value: false
     options:
       - false
@@ -105,8 +103,7 @@ input:
       Minimal area that cut objects should have.
 
   - name: DebugMode
-    type: Boolean
-    key: 
+    type: Boolean 
     value: false
     options:
       - false
@@ -116,7 +113,6 @@ input:
 
   - name: plot
     type: Plot
-    key: 
     value: false
     options: [true, false]
     help: Should a figure be created?
