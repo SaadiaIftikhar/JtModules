@@ -144,10 +144,10 @@ classdef identify_spots_2D
             Options.DetectBias = [];
 
             % Get the LoG filter kernel
-            log_filter = cpsub.fspecialCP3D('2D LoG',Options.ObSize);
+            log_filter = fspecialCP3D('2D LoG',Options.ObSize);
 
             % Peform initial segmentation of spots
-            [ObjCount{1} SegmentationCC{1} FiltImage] = cpsub.ObjByFilter( ...
+            [ObjCount{1} SegmentationCC{1} FiltImage] = ObjByFilter( ...
                 double(image), log_filter, ...
                 Options.ObjThr, Options.limQuant, Options.RescaleThr, ...
                 Options.ObjIntensityThr, true, [], Options.DetectBias)
@@ -155,7 +155,7 @@ classdef identify_spots_2D
 
             % Deblend spots
             if deblending_steps > 0
-                spots_deblend = int32(cpsub.SourceExtractorDeblend( ...
+                spots_deblend = int32(SourceExtractorDeblend( ...
                     double(image), SegmentationCC{1}, FiltImage, Options));
             end
 
