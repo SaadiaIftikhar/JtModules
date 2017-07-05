@@ -1,3 +1,4 @@
+---
 version: 0.0.3
 
 input:
@@ -14,7 +15,7 @@ input:
 
   - name: ThresholdRange
     type: Sequence
-    value: [0.0025,1]
+    value: [0.0025, 1]
     help: >
       Intensity thresholding: Lower and upper bounds on threshold, 
       in the range [0,1].
@@ -29,24 +30,16 @@ input:
   - name: plot
     type: Plot
     value: false
-    options: [true, false]
     help: Should a figure be created?
 
 output:
 
   - name: FinalLabelMatrixImage
     type: LabelImage
-    key:  identify_secondary_objects_original.output_label_image
+    key:  identify_secondary_objects_original.FinalLabelMatrixImage
     help: Binary output image.
 
-  - name: fig
-    type: Figure
+  - name: figure
     value: false
-    options: [true, false]
-    help: >
-      Identified objects in <i>output_label_image</i> and overlay of object
-      outlines on <i>intensity_image</i>.
-
-
-
+    help: Plot teh figure.
 

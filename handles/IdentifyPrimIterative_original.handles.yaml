@@ -1,3 +1,4 @@
+---
 version: 0.0.3
 
 input:
@@ -19,7 +20,7 @@ input:
 
   - name: ThresholdRange
     type: Sequence
-    value: [0.00305175781,1]
+    value: [0.00305175781, 1]
     help: >
       Intensity thresholding. Lower and upper bounds on threshold, 
       in the range [0,1].
@@ -53,13 +54,12 @@ input:
       to be considered a clump.
 
   - name: TestMode2
-    type: Boolean
+    type: Test
     value: false
-    options: [true, false]
     help: >
       Whether selected clumps should be plotted in order to empirically determine 
-      optimal values for <max_solidity>, <min_formfactor>, min_area and
-      and max_area (results will be shown for the last cutting pass).
+      optimal values for max_solidity min_formfactor min_area and
+      and max_area results will be shown for the last cutting pass.
 
   - name: smoothingDiskSize
     type: Numeric
@@ -84,13 +84,12 @@ input:
     help: Perimeter analysis. Maximum concave region equivalent RADIUS.
 
   - name: TestMode
-    type: Boolean
+    type: Test
     value: false
-    options: [true, false]
     help: >
       Whether result of the perimeter analysis should be plotted in order to
       empirically determine optimal values for min_angle and max_radius
-      (results will be shown for the last cutting pass).
+      results will be shown for the last cutting pass.
 
   - name: LowerSizeCutThres
     type: Numeric
@@ -99,30 +98,23 @@ input:
       Minimal area that cut objects should have.
 
   - name: DebugMode
-    type: Boolean 
+    type: Test
     value: false
-    options: [true, false]
     help: >
       start debugging the code.
 
   - name: plot
     type: Plot
     value: false
-    options: [true, false]
     help: Should a figure be created?
 
 output:
 
   - name: imFinalObjects
     type: BinaryImage
-    key:  identify_primary_objects_original.output_label_image 
+    key:  identify_primary_objects_original.imFinalObjects
     help: label output image.
 
-  - name: fig
-    type: Figure
+  - name: figure
     value: false
-    options: [true, false]
-
-
-
-
+    help: Plot teh figure.
