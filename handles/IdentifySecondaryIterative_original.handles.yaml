@@ -40,6 +40,6 @@ output:
     help: Binary output image.
 
   - name: figure
-    value: false
-    help: Plot teh figure.
+    type: Figure
+    help: Plot the figure.
 

@@ -116,5 +116,5 @@ output:
     help: label output image.
 
   - name: figure
-    value: false
+    type: Figure
     help: Plot teh figure.
