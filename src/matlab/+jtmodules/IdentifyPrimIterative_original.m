@@ -265,6 +265,7 @@ else
     
 end
 
+imFinalObjects = int32(imFinalObjects);
 
 if plot
         plots = { ...
