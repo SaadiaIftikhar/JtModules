@@ -53,14 +53,6 @@ input:
       Maximal area value for a continuous pixel region
       to be considered a clump.
 
-  - name: TestMode2
-    type: Test
-    value: false
-    help: >
-      Whether selected clumps should be plotted in order to empirically determine 
-      optimal values for max_solidity min_formfactor min_area and
-      and max_area results will be shown for the last cutting pass.
-
   - name: smoothingDiskSize
     type: Numeric
     value: 3
@@ -83,25 +75,11 @@ input:
     value: 30
     help: Perimeter analysis. Maximum concave region equivalent RADIUS.
 
-  - name: TestMode
-    type: Test
-    value: false
-    help: >
-      Whether result of the perimeter analysis should be plotted in order to
-      empirically determine optimal values for min_angle and max_radius
-      results will be shown for the last cutting pass.
-
   - name: LowerSizeCutThres
     type: Numeric
     value: 700
     help: >
       Minimal area that cut objects should have.
-
-  - name: DebugMode
-    type: Test
-    value: false
-    help: >
-      start debugging the code.
 
   - name: plot
     type: Plot
@@ -111,8 +89,8 @@ input:
 output:
 
   - name: imFinalObjects
-    type: BinaryImage
-    key:  identify_primary_objects_original.imFinalObjects
+    type: LabelImage
+    key:  IdentifyPrimIterative_original.imFinalObjects
     help: label output image.
 
   - name: figure

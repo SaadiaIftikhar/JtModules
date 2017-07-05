@@ -36,7 +36,7 @@ output:
 
   - name: FinalLabelMatrixImage
     type: LabelImage
-    key:  identify_secondary_objects_original.FinalLabelMatrixImage
+    key:  IdentifySecondaryIterative_original.FinalLabelMatrixImage
     help: Binary output image.
 
   - name: figure

@@ -11,15 +11,16 @@ methods (Static)
 function [imFinalObjects, figure] =  main(input_image, CuttingPasses, ...
                         ThresholdCorrection, ThresholdRange, SolidityThres, ...
                         FormFactorThres, LowerSizeThres, UpperSizeThres, ...
-            TestMode2, smoothingDiskSize, WindowSize, PerimSegEqSegment, ...
-            PerimSegEqRadius, TestMode, LowerSizeCutThres, DebugMode, plot)
+                        smoothingDiskSize, WindowSize, PerimSegEqSegment, ...
+                        PerimSegEqRadius, LowerSizeCutThres, plot)
  
-
- drawnow
  
- ImageName = 'Image';
- ModuleName = 'PrimaryIterative';
- ObjectName = 'Object'; 
+ImageName = 'Image';
+ModuleName = 'PrimaryIterative';
+ObjectName = 'Object'; 
+DebugMode = 'Off'; 
+TestMode2 = 'false';
+TestMode = 'false'; 
  
  handles.Settings.CurrentModule = 'PrimaryIterative'; 
  handles.Settings.CurrentModuleNum = 1;
@@ -35,12 +36,12 @@ function [imFinalObjects, figure] =  main(input_image, CuttingPasses, ...
  handles.Settings.UpperSizeThres = UpperSizeThres; 
  handles.Settings.LowerSizeThres = LowerSizeThres; 
  handles.Settings.LowerSizeCutThres = LowerSizeCutThres; 
- handles.Settings.TestMode2 = TestMode2; 
+ handles.Settings.TestMode2 = 'false'; 
  handles.Settings.WindowSize = WindowSize; 
  handles.Settings.smoothingDiskSize = smoothingDiskSize; 
  handles.Settings.PerimSegEqRadius = PerimSegEqRadius; 
  handles.Settings.PerimSegEqSegment = PerimSegEqSegment; 
- handles.Settings.TestMode = TestMode; 
+ handles.Settings.TestMode = 'false'; 
  handles.Settings.input_image = input_image;
 
 
