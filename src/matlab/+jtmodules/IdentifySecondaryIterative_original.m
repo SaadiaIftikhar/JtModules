@@ -240,7 +240,7 @@ ThresholdArray = cell(numThresholdsToTest,1); % [modified by PLab to include mul
 if GetThreshold
     % [PLab] force to use minimal treshold value of 0 and maximum of 1, to ensure
     % equal thresholding for all tested tresholds
-    [handles,ThresholdArray{1}] = CPthreshold(handles,iThreshold,pObject,'0','1',ThresholdCorrection(1),OrigImage,ImageName,ModuleName,SecondaryObjectName);
+    [handles,ThresholdArray{1}] = CPthreshold(handles,iThreshold,pObject,0,1,ThresholdCorrection(1),OrigImage,ImageName,ModuleName,SecondaryObjectName);
 else
     ThresholdArray{1} = 0; % should never be used
 end
