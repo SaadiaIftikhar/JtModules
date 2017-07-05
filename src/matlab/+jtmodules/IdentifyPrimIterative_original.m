@@ -151,7 +151,7 @@ if ~isempty(imInputObjects)
         %-------------
         
         % Smooth image
-        SmoothDisk = getnhood(strel('disk',smoothingDiskSize,0));%minimum that has to be done to avoid problems with bwtraceboundary
+        SmoothDisk = getnhood(strel('disk',double(smoothingDiskSize),0));%minimum that has to be done to avoid problems with bwtraceboundary
         imObj2Cut = bwlabel(imdilate(imerode(imObj2Cut,SmoothDisk),SmoothDisk));
         
         % In rare cases the above smoothing approach creates new, small
