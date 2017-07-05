@@ -117,4 +117,4 @@ output:
 
   - name: figure
     type: Figure
-    help: Plot teh figure.
+    help: Plot the figure.
