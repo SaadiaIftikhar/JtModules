@@ -366,8 +366,8 @@ end
 %%% make sure that the threshold is not larger than the minimum threshold
 
 Threshold = ThresholdCorrection*Threshold;
-[Threshold] = max(Threshold(:),MinimumThreshold);
-[Threshold] = min(Threshold(:),MaximumThreshold);
+% [Threshold] = max(Threshold(:),MinimumThreshold);
+% [Threshold] = min(Threshold(:),MaximumThreshold);
 
 % handles = CPaddmeasurements('Image','OrigThreshold',[ObjectVar,ImageName],mean(mean(Threshold)));
 
